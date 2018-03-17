@@ -32,7 +32,7 @@ public class CellMaker : MonoBehaviour {
         {
             var boxCollider = boxColliderMetaInfo.GetComponent<BoxCollider>();
             boxColliderMetaInfo.boxCollider = boxCollider;
-
+            boxColliderMetaInfo.GenerateRectInfo();
         }
     }
 }
