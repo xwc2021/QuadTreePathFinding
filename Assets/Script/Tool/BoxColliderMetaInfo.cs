@@ -43,12 +43,7 @@ public class BoxColliderMetaInfo : MonoBehaviour {
         Vector3 zDir = transform.forward;
         var xLen = 0.5f * size.x;
         var zLen = 0.5f * size.z;
-        var fixedPos = new Vector3(pos.x, 0, pos.z);
-        point[0] = fixedPos + xDir * xLen + zDir * zLen;
-        point[1] = fixedPos - xDir * xLen + zDir * zLen;
-        point[2] = fixedPos - xDir * xLen - zDir * zLen;
-        point[3] = fixedPos + xDir * xLen - zDir * zLen;
-
+        Generate(pos, xDir, zDir, xLen, zLen);
     }
 
     void GenerateFromBlender(Vector3 pos, Vector3 size)
@@ -56,11 +51,16 @@ public class BoxColliderMetaInfo : MonoBehaviour {
         Vector3 xDir = transform.right;
         Vector3 zDir = transform.up;
         var xLen = 0.5f * size.x;
-        var yLen = 0.5f * size.y;
+        var zLen = 0.5f * size.y;
+        Generate(pos, xDir, zDir, xLen, zLen);
+    }
+
+    void Generate(Vector3 pos, Vector3 xDir, Vector3 zDir, float xLen, float zLen)
+    {
         var fixedPos = new Vector3(pos.x, 0, pos.z);
-        point[0] = fixedPos + xDir * xLen + zDir * yLen;
-        point[1] = fixedPos - xDir * xLen + zDir * yLen;
-        point[2] = fixedPos - xDir * xLen - zDir * yLen;
-        point[3] = fixedPos + xDir * xLen - zDir * yLen;
+        point[0] = fixedPos + xDir * xLen + zDir * zLen;
+        point[1] = fixedPos - xDir * xLen + zDir * zLen;
+        point[2] = fixedPos - xDir * xLen - zDir * zLen;
+        point[3] = fixedPos + xDir * xLen - zDir * zLen;
     }
 }

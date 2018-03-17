@@ -17,7 +17,7 @@ public class CellMakerEditor : Editor {
 
         DrawDefaultInspector();
 
-        if (GUILayout.Button("Get All BoxCollider In Scene"))
+        if (GUILayout.Button("Get All BoxCollider And Generate Rect"))
         {
             cellMaker.GetAllBoxColliderInScene();
             Debug.Log("Get");
