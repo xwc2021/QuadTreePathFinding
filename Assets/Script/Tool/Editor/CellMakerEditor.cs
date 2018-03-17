@@ -19,7 +19,7 @@ public class CellMakerEditor : Editor {
 
         if (GUILayout.Button("Get All BoxCollider And Generate Rect"))
         {
-            cellMaker.GetAllBoxColliderInScene();
+            cellMaker.GetAllBoxColliderMetaInfoInSceneAndGenerateRect();
             Debug.Log("Get");
         }
 

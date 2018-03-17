@@ -10,6 +10,7 @@ public class BoxColliderMetaInfo : MonoBehaviour {
     public BoxCollider boxCollider;
     public BoxDirection boxDirection = BoxDirection.Default;
 
+    [SerializeField]
     Vector3[] point;
     public void GenerateRectInfo()
     {

@@ -211,6 +211,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   boxCollider: {fileID: 99291509}
   boxDirection: 0
+  point:
+  - {x: 27.601028, y: 0, z: -0.9778724}
+  - {x: 13.364972, y: 0, z: -0.9778724}
+  - {x: 13.364972, y: 0, z: -15.213926}
+  - {x: 27.601028, y: 0, z: -15.213926}
 --- !u!1 &153276726
 GameObject:
   m_ObjectHideFlags: 0
@@ -337,6 +342,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   boxCollider: {fileID: 208006959}
   boxDirection: 0
+  point:
+  - {x: 0.1373969, y: 0, z: -15.09453}
+  - {x: -17.582445, y: 0, z: -3.2735875}
+  - {x: -18.137396, y: 0, z: -4.1054707}
+  - {x: -0.417554, y: 0, z: -15.926413}
 --- !u!1 &341033685
 GameObject:
   m_ObjectHideFlags: 0
@@ -435,6 +445,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   boxCollider: {fileID: 341033687}
   boxDirection: 0
+  point:
+  - {x: 27.981478, y: 0, z: 34.514717}
+  - {x: 23.018522, y: 0, z: 34.514717}
+  - {x: 23.018522, y: 0, z: 11.8852825}
+  - {x: 27.981478, y: 0, z: 11.8852825}
 --- !u!1 &372371407
 GameObject:
   m_ObjectHideFlags: 0
@@ -581,6 +596,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   boxCollider: {fileID: 417644155}
   boxDirection: 1
+  point:
+  - {x: -24.921257, y: -0.00000044868398, z: -28.284145}
+  - {x: -35.32999, y: -0.00000077999334, z: -32.18846}
+  - {x: -43.60391, y: 0.00000044868398, z: -10.13057}
+  - {x: -33.19517, y: 0.00000077999334, z: -6.2262545}
 --- !u!1 &553808704
 GameObject:
   m_ObjectHideFlags: 0
@@ -784,7 +804,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 679676646}
   m_LocalRotation: {x: 0.34217995, y: -0, z: -0, w: 0.93963444}
-  m_LocalPosition: {x: -0.53, y: 14.4, z: -39}
+  m_LocalPosition: {x: -0.53, y: 28.1, z: -55.3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -1135,6 +1155,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   boxCollider: {fileID: 2038760176}
   boxDirection: 0
+  point:
+  - {x: 13.569679, y: 0, z: -23.11255}
+  - {x: 1.7803764, y: 0, z: -32.605522}
+  - {x: 7.4828796, y: 0, z: -39.687447}
+  - {x: 19.272182, y: 0, z: -30.194479}
 --- !u!1 &2070600749
 GameObject:
   m_ObjectHideFlags: 0
@@ -1233,6 +1258,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   boxCollider: {fileID: 2070600751}
   boxDirection: 0
+  point:
+  - {x: -15.6748295, y: 0, z: 31.548714}
+  - {x: -27.525171, y: 0, z: 31.548714}
+  - {x: -27.525171, y: 0, z: 17.651287}
+  - {x: -15.6748295, y: 0, z: 17.651287}
 --- !u!1 &2108440897
 GameObject:
   m_ObjectHideFlags: 0

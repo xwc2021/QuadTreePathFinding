@@ -24,7 +24,7 @@ public class CellMaker : MonoBehaviour {
     public Vector3 GetOrigin() { return transform.position; }
     public Vector3 GetBorder() { return border.position; }
 
-    public void GetAllBoxColliderInScene()
+    public void GetAllBoxColliderMetaInfoInSceneAndGenerateRect()
     {
         boxColliderMetaInfoList=GameObject.FindObjectsOfType<BoxColliderMetaInfo>();
 
