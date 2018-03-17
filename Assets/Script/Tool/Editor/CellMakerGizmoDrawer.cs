@@ -11,6 +11,9 @@ public class CellMakerGizmoDrawer {
         var boxMetaInfoList = target.boxColliderMetaInfoList;
         foreach (var boxColliderMetaInfo in boxMetaInfoList)
             DrawRect(boxColliderMetaInfo);
+
+        Gizmos.DrawLine(target.P0.position, target.P1.position);
+        Gizmos.DrawLine(target.P2.position, target.P3.position);
     }
 
     static Color boxColor=Color.white;

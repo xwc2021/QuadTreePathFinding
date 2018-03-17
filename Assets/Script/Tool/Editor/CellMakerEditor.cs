@@ -27,5 +27,10 @@ public class CellMakerEditor : Editor {
         {
             Debug.Log("Generate");
         }
+
+        if (GUILayout.Button("TestIsIntersect"))
+        {
+            cellMaker.TestIsIntersect();
+        }
     }
 }
