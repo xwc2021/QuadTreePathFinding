@@ -49,7 +49,7 @@ public class GeometryTool
             for (var k = 0; k < 4; ++k)
             {
                 Vector3 p2, p3;
-                GetEdge(b, i, out p2, out p3);
+                GetEdge(b, k, out p2, out p3);
                 if (GeometryTool.IsIntersect(p0, p1, p2, p3))
                     return true;
             }
