@@ -59,6 +59,8 @@ public class GeometryTool
     }
 
     //b是不是被a包住
+    //(用在a的軸向沒有和世界對齊的情況)
+    //(另1種作法是把b的4個點轉換到a的local，之後就可以用軸對齊的判定)
     public static bool IsContain(IRect a, IRect b)
     {
         var point = a.GetRectInfo();
@@ -72,8 +74,8 @@ public class GeometryTool
         var width = xDir.magnitude;
         var height = zDir.magnitude;
 
-        var xNormalDir = xDir.normalized;
-        var zNormalDir = zDir.normalized;
+        var xNormalDir = xDir/width;
+        var zNormalDir = zDir/height;
 
         var testPoint = b.GetRectInfo();
         foreach (var tPoint in testPoint)
@@ -115,6 +117,9 @@ public class GeometryTool
 
     public static void Generate(Vector3 pos, Vector3 xDir, Vector3 zDir, float xLen, float zLen, Vector3[] point)
     {
+        //口 頂點順序(從右上角開始逆時鐘方法)
+        //10
+        //23
         var fixedPos = new Vector3(pos.x, 0, pos.z);
         point[0] = fixedPos + xDir * xLen + zDir * zLen;
         point[1] = fixedPos - xDir * xLen + zDir * zLen;

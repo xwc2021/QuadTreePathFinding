@@ -5,6 +5,7 @@ using UnityEngine;
 public class CellMaker : MonoBehaviour {
 
     public BoxColliderMetaInfo[] boxColliderMetaInfoList;
+    public IRect[] colliderRects;
 
     //分割的臨界值
     [SerializeField]
@@ -41,13 +42,71 @@ public class CellMaker : MonoBehaviour {
             boxColliderMetaInfo.boxCollider = boxCollider;
             boxColliderMetaInfo.GenerateRectInfo();
         }
+
+        colliderRects = new IRect[boxColliderMetaInfoList.Length];
+        for (var i = 0; i < boxColliderMetaInfoList.Length; ++i)
+            colliderRects[i] = boxColliderMetaInfoList[i] as IRect;
+    }
+
+    [SerializeField]
+    int maxSplitLevel=5;
+    QuadTreeConnectedNode quadTreeConnectedNode;
+
+    public void CollectDrawRect(List<IRect> list)
+    {
+        if(quadTreeConnectedNode!=null)
+            quadTreeConnectedNode.CollectDrawRect(list);
     }
 
     //除了是四叉樹，所有葉節點彼此還會相連
     public void GenerateQuadTreeConnectedNode()
     {
+        var origin=GetOrigin();
+        var border = GetBorder();
+        quadTreeConnectedNode = new QuadTreeConnectedNode(origin.x, border.x, origin.z, border.z,1);
+
+        //第1次直接split
+        var nowTestNodes =quadTreeConnectedNode.SplitTo4();
+        var nextTestNodes = new List<QuadTreeConnectedNode>();
+
+        int count = maxSplitLevel - 1;
+        for (var i = 1; i <= count; ++i)
+        {
+            foreach (var node in nowTestNodes)
+            {
+                var a = NodeIsIntersectWithColliderRects(node, colliderRects);
+                var b = NodeIsContainColliderRects(node, colliderRects);
+                if ( a || b)//如果有rect和node相交或是在node裡面
+                    nextTestNodes.AddRange(node.SplitTo4());//就把node分成4塊，並加入下一輪的測試清單
+            }
+            nowTestNodes = nextTestNodes.ToArray();
+            nextTestNodes.Clear();
+        } 
     }
 
+    bool NodeIsIntersectWithColliderRects(QuadTreeConnectedNode node,IRect[] colliderRects)
+    {
+        for (var i = 0; i < colliderRects.Length; ++i)
+        {
+            var rect = colliderRects[i];
+            if (GeometryTool.IsIntersect(node, rect))
+                return true;
+        }
+        return false;
+    }
+
+    bool NodeIsContainColliderRects(QuadTreeConnectedNode node, IRect[] colliderRects)
+    {
+        for (var i = 0; i < colliderRects.Length; ++i)
+        {
+            var rect = colliderRects[i];
+            if (node.IsContainRect(rect))
+                return true;
+        }
+        return false;
+    }
+
+    //debug用
     public Transform P0;
     public Transform P1;
     public Transform P2;
