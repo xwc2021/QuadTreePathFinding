@@ -52,8 +52,6 @@ public class CellMaker : MonoBehaviour {
     public Transform P1;
     public Transform P2;
     public Transform P3;
-    public Transform C1;
-    public Transform C2;
 
     public void TestIsIntersect()
     {
@@ -61,7 +59,7 @@ public class CellMaker : MonoBehaviour {
         Vector3 p1 = P1.position;
         Vector3 p2 = P2.position;
         Vector3 p3 = P3.position;
-        bool result = BoxColliderMetaInfo.IsIntersect(p0, p1, p2, p3,C1,C2);
+        bool result = GeometryTool.IsIntersect(p0, p1, p2, p3);
         Debug.Log(result);
     }
 }

@@ -19,7 +19,8 @@ public class CellMakerGizmoDrawer {
     static Color boxColor=Color.white;
     static void DrawRect(BoxColliderMetaInfo boxColliderMetaInfo)
     {
-        var point = boxColliderMetaInfo.GetRectInfo();
+        var rect = boxColliderMetaInfo as IRect;
+        var point = rect.GetRectInfo();
         if (point == null)
             return;
 
