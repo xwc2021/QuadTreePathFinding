@@ -69,6 +69,7 @@ public class CellMaker : MonoBehaviour {
         var nowTestNodes =quadTreeConnectedNode.SplitTo4();
         var nextTestNodes = new List<QuadTreeConnectedNode>();
 
+        //進行分裂
         int count = maxSplitLevel - 1;
         for (var i = 1; i <= count; ++i)
         {
@@ -76,12 +77,31 @@ public class CellMaker : MonoBehaviour {
             {
                 var a = NodeIsIntersectWithColliderRects(node, colliderRects);
                 var b = NodeIsContainColliderRects(node, colliderRects);
-                if ( a || b)//如果有rect和node相交或是在node裡面
+                if (a || b)//如果有rect和node相交或是在node裡面
                     nextTestNodes.AddRange(node.SplitTo4());//就把node分成4塊，並加入下一輪的測試清單
+                else
+                {
+                    SetIsOuter(node, colliderRects);
+                }
             }
             nowTestNodes = nextTestNodes.ToArray();
             nextTestNodes.Clear();
-        } 
+        }
+
+        //分裂完後，還要測式1次
+        foreach (var node in nowTestNodes)
+        {
+            SetIsOuter(node, colliderRects);
+        }
+    }
+
+    void SetIsOuter(QuadTreeConnectedNode node, IRect[] colliderRects)
+    {
+        //如果node在rect裡面
+        if (NodeIsInColliderRects(node, colliderRects))
+            node.SetIsOuter(false);
+        else
+            node.SetIsOuter(true);
     }
 
     bool NodeIsIntersectWithColliderRects(QuadTreeConnectedNode node,IRect[] colliderRects)
@@ -101,6 +121,17 @@ public class CellMaker : MonoBehaviour {
         {
             var rect = colliderRects[i];
             if (node.IsContainRect(rect))
+                return true;
+        }
+        return false;
+    }
+
+    bool NodeIsInColliderRects(QuadTreeConnectedNode node, IRect[] colliderRects)
+    {
+        for (var i = 0; i < colliderRects.Length; ++i)
+        {
+            var rect = colliderRects[i];
+            if (GeometryTool.IsContain(rect,node))
                 return true;
         }
         return false;

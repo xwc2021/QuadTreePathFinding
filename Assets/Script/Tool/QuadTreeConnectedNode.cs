@@ -4,6 +4,12 @@ using UnityEngine;
 
 public class QuadTreeConnectedNode:IRect {
 
+    bool isOuter = true;
+    public void SetIsOuter(bool b)
+    {
+        isOuter = b;
+    }
+
     int level;
     float minX, maxX, minZ, maxZ;
     float centerX, centerZ;
@@ -65,7 +71,7 @@ public class QuadTreeConnectedNode:IRect {
 
     public void CollectDrawRect(List<IRect> list)
     {
-        if (!HasChild())
+        if (!HasChild() && isOuter)
             list.Add(this);
 
         if (childs == null)
