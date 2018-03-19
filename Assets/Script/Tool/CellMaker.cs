@@ -63,7 +63,7 @@ public class CellMaker : MonoBehaviour {
     {
         var origin=GetOrigin();
         var border = GetBorder();
-        quadTreeConnectedNode = new QuadTreeConnectedNode(origin.x, border.x, origin.z, border.z,1);
+        quadTreeConnectedNode = new QuadTreeConnectedNode(origin.x, border.x, origin.z, border.z,0);
 
         //第1次直接split
         var nowTestNodes =quadTreeConnectedNode.SplitTo4();
