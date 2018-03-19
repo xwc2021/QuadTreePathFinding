@@ -281,7 +281,7 @@ public class QuadTreeConnectedNode:IRect {
                 leftNode.rightLink[0] = rightNode;
                 rightNode.leftLink[0] = leftNode;
 
-                verticalLinks.Add(new LinkInfo(leftNode, rightNode));
+                horizontalLinks.Add(new LinkInfo(leftNode, rightNode));
             }
 
             //1對多
@@ -298,7 +298,7 @@ public class QuadTreeConnectedNode:IRect {
 
                     leftNode.rightLink[i] = rightNode;
 
-                    verticalLinks.Add(new LinkInfo(leftNode, rightNode));
+                    horizontalLinks.Add(new LinkInfo(leftNode, rightNode));
                 }
             }
 
@@ -316,7 +316,7 @@ public class QuadTreeConnectedNode:IRect {
 
                     rightNode.leftLink[i] = leftNode;
 
-                    verticalLinks.Add(new LinkInfo(leftNode,rightNode));
+                    horizontalLinks.Add(new LinkInfo(leftNode,rightNode));
                 }
             }
         }
@@ -334,7 +334,7 @@ public class QuadTreeConnectedNode:IRect {
                 downNode.upLink[0] = upNode;
                 upNode.downLink[0] = downNode;
 
-                horizontalLinks.Add(new LinkInfo(downNode, upNode));
+                verticalLinks.Add(new LinkInfo(downNode, upNode));
             }
 
             //1對多
@@ -351,7 +351,7 @@ public class QuadTreeConnectedNode:IRect {
 
                     downNode.upLink[i] = upNode;
 
-                    horizontalLinks.Add(new LinkInfo(downNode, upNode));
+                    verticalLinks.Add(new LinkInfo(downNode, upNode));
                 }
             }
 
@@ -369,7 +369,7 @@ public class QuadTreeConnectedNode:IRect {
 
                     upNode.downLink[i] = downNode;
 
-                    horizontalLinks.Add(new LinkInfo(downNode, upNode));
+                    verticalLinks.Add(new LinkInfo(downNode, upNode));
                 }
             }
         }
