@@ -5,6 +5,7 @@ using UnityEngine;
 public interface IRect
 {
     Vector3[] GetRectInfo();
+    Vector3 GetCenter();
 }
 
 public class GeometryTool
@@ -23,7 +24,7 @@ public class GeometryTool
         float f = p2.z - p0.z;
 
         float temp = (a * d - b * c);
-        if (temp == 0)
+        if (Mathf.Abs(temp)<float.Epsilon)
             return false;
 
         float t = (e * d - c * f) / temp;
@@ -77,13 +78,8 @@ public class GeometryTool
         var xNormalDir = xDir/width;
         var zNormalDir = zDir/height;
 
-        var testPoint = b.GetRectInfo();
-
         //只判斷中心點
-        var center=Vector3.zero;
-        foreach (var tPoint in testPoint)
-            center = center+ tPoint;
-        center = center* 0.25f;
+        var center = b.GetCenter();
 
         var vec = center - p2;
         var xValue = Vector3.Dot(vec, xNormalDir);

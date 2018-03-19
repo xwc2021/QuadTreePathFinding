@@ -12,16 +12,22 @@ public class BoxColliderMetaInfo : MonoBehaviour, IRect
     public BoxDirection boxDirection = BoxDirection.Default;
 
     [SerializeField]
-    Vector3[] point;
+    Vector3[] points;
+    Vector3 centerPoint;
 
-    Vector3[] IRect.GetRectInfo()
+    public Vector3[] GetRectInfo()
     {
-        return point;
+        return points;
+    }
+
+    public Vector3 GetCenter()
+    {
+        return centerPoint;
     }
 
     public void GenerateRectInfo()
     {
-        point = new Vector3[4];
+        points = new Vector3[4];
 
         var boxColliderSize = boxCollider.size;
         var bosLossyScale = transform.lossyScale;
@@ -38,6 +44,8 @@ public class BoxColliderMetaInfo : MonoBehaviour, IRect
                 GenerateFromBlender(boxColliderCenter, bosFinalSize);
                 break;
         }
+
+        centerPoint = 0.25f* (points[0] + points[1] + points[2] + points[3]);
     }
 
     void GenerateRectDefault(Vector3 pos, Vector3 size)
@@ -46,7 +54,7 @@ public class BoxColliderMetaInfo : MonoBehaviour, IRect
         Vector3 zDir = transform.forward;
         var xLen = 0.5f * size.x;
         var zLen = 0.5f * size.z;
-        GeometryTool.Generate(pos, xDir, zDir, xLen, zLen,point);
+        GeometryTool.Generate(pos, xDir, zDir, xLen, zLen, points);
     }
 
     void GenerateFromBlender(Vector3 pos, Vector3 size)
@@ -55,8 +63,6 @@ public class BoxColliderMetaInfo : MonoBehaviour, IRect
         Vector3 zDir = transform.up;
         var xLen = 0.5f * size.x;
         var zLen = 0.5f * size.y;
-        GeometryTool.Generate(pos, xDir, zDir, xLen, zLen, point);
+        GeometryTool.Generate(pos, xDir, zDir, xLen, zLen, points);
     }
-
-    
 }

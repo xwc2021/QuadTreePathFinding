@@ -27,6 +27,10 @@ public class CellMakerEditor : Editor {
         if (GUILayout.Button("Generate Nav Cell"))
         {
             cellMaker.GenerateQuadTreeConnectedNode();
+            cellMaker.MakeConnected();
+
+            cellMaker.CollectOuterQuadRect();
+            cellMaker.CollectInnerQuadRect();
             SceneView.RepaintAll();
             Debug.Log("Generate");
         }

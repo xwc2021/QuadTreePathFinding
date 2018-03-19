@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class CellMaker : MonoBehaviour {
 
+    public bool showNodeLink = true;
+
     public BoxColliderMetaInfo[] boxColliderMetaInfoList;
     public IRect[] colliderRects;
 
@@ -95,6 +97,12 @@ public class CellMaker : MonoBehaviour {
         }
     }
 
+    public void MakeConnected()
+    {
+        QuadTreeConnectedNode.ClearLinks();
+        quadTreeConnectedNode.MakeConnected();
+    }
+
     void SetIsOuter(QuadTreeConnectedNode node, IRect[] colliderRects)
     {
         //如果node的中心點在rect裡面
@@ -152,4 +160,20 @@ public class CellMaker : MonoBehaviour {
         bool result = GeometryTool.IsIntersect(p0, p1, p2, p3);
         Debug.Log(result);
     }
+
+    List<IRect> outerQuadRect = new List<IRect>();
+    public void CollectOuterQuadRect()
+    {
+        outerQuadRect.Clear();
+        CollectDrawRect(outerQuadRect, true);
+    }
+    public List<IRect> GetOuterQuadRect() { return outerQuadRect; }
+
+    List<IRect> innerQuadRect =new List<IRect>();
+    public void CollectInnerQuadRect()
+    {
+        innerQuadRect.Clear(); ;
+        CollectDrawRect(innerQuadRect, false);
+    }
+    public List<IRect> GetInnerQuadRect() { return innerQuadRect; }
 }

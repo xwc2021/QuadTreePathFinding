@@ -8,6 +8,7 @@ public class CellMakerGizmoDrawer {
     [DrawGizmo(GizmoType.Selected | GizmoType.Active)]
     static void DrawGizmoFor(CellMaker target, GizmoType gizmoType)
     {
+        //測試2線段交叉
         Gizmos.DrawLine(target.P0.position, target.P1.position);
         Gizmos.DrawLine(target.P2.position, target.P3.position);
 
@@ -19,23 +20,38 @@ public class CellMakerGizmoDrawer {
         }
 
         //outer
-        var drawQuadRectList = new List<IRect>();
-        target.CollectDrawRect(drawQuadRectList,true);
-        foreach (var rect in drawQuadRectList)
+        var OuterQuadRect = target.GetOuterQuadRect();
+        foreach (var rect in OuterQuadRect)
             DrawRect(rect, quadTreeOuter);
 
+        //Debug.Log(OuterQuadRect.Count);
+
         //innner
-        drawQuadRectList.Clear();
-        target.CollectDrawRect(drawQuadRectList, false);
-        foreach (var rect in drawQuadRectList)
+        var InnerQuadRect = target.GetInnerQuadRect();
+        foreach (var rect in InnerQuadRect)
             DrawRect(rect, quadTreeInner);
 
-        Debug.Log(drawQuadRectList.Count);
+        
+
+        if (target.showNodeLink)
+        {
+            var HorizontalLinks = QuadTreeConnectedNode.GetHorizontalLinks();
+
+            foreach (var link in HorizontalLinks)
+                DrawQuadTreeLink(link.from, link.to, quadTreeHorizontalLink);
+
+            var VerticaLinks = QuadTreeConnectedNode.GetVerticaLinks();
+
+            foreach (var link in VerticaLinks)
+                DrawQuadTreeLink(link.from, link.to, quadTreeVerticalLink);
+        }
     }
 
     static Color colliderColor=Color.green;
     static Color quadTreeOuter = Color.yellow;
     static Color quadTreeInner = Color.red;
+    static Color quadTreeHorizontalLink = new Color(0, 0.99609375f, 0.99609375f);
+    static Color quadTreeVerticalLink = new Color(0.9375f, 0.5f, 0.5f);
     static void DrawRect(IRect rect,Color color)
     {
         var point = rect.GetRectInfo();
@@ -48,8 +64,10 @@ public class CellMakerGizmoDrawer {
         Gizmos.DrawLine(point[3], point[0]);
     }
 
-    static void DrawQuadTree()
+    public static void DrawQuadTreeLink(QuadTreeConnectedNode from ,QuadTreeConnectedNode to,Color color )
     {
+        Gizmos.color = color;
+        Gizmos.DrawLine(from.GetCenter(),to.GetCenter());
     }
 
 }
