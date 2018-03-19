@@ -18,15 +18,24 @@ public class CellMakerGizmoDrawer {
                 DrawRect(rect, colliderColor);
         }
 
+        //outer
         var drawQuadRectList = new List<IRect>();
-        target.CollectDrawRect(drawQuadRectList);
-
+        target.CollectDrawRect(drawQuadRectList,true);
         foreach (var rect in drawQuadRectList)
-            DrawRect(rect, quadTreeColor);
+            DrawRect(rect, quadTreeOuter);
+
+        //innner
+        drawQuadRectList.Clear();
+        target.CollectDrawRect(drawQuadRectList, false);
+        foreach (var rect in drawQuadRectList)
+            DrawRect(rect, quadTreeInner);
+
+        Debug.Log(drawQuadRectList.Count);
     }
 
     static Color colliderColor=Color.green;
-    static Color quadTreeColor = Color.yellow;
+    static Color quadTreeOuter = Color.yellow;
+    static Color quadTreeInner = Color.red;
     static void DrawRect(IRect rect,Color color)
     {
         var point = rect.GetRectInfo();

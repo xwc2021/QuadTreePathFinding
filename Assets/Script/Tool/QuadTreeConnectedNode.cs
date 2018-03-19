@@ -47,7 +47,7 @@ public class QuadTreeConnectedNode:IRect {
         return childs != null;
     }
 
-    public bool IsContainRect(IRect rect)
+    public bool IsContainRectVertex(IRect rect)
     {
         var testPoints = rect.GetRectInfo();
         for (var i = 0; i < testPoints.Length; ++i)
@@ -69,15 +69,15 @@ public class QuadTreeConnectedNode:IRect {
         return points;
     }
 
-    public void CollectDrawRect(List<IRect> list)
+    public void CollectDrawRect(List<IRect> list,bool outer)
     {
-        if (!HasChild() && isOuter)
+        if (!HasChild() &&　this.isOuter== outer)
             list.Add(this);
 
         if (childs == null)
             return; 
 
         foreach (var child in childs)
-            child.CollectDrawRect(list);
+            child.CollectDrawRect(list, outer);
     }
 }

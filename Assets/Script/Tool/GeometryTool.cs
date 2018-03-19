@@ -61,7 +61,7 @@ public class GeometryTool
     //b是不是被a包住
     //(用在a的軸向沒有和世界對齊的情況)
     //(另1種作法是把b的4個點轉換到a的local，之後就可以用軸對齊的判定)
-    public static bool IsContain(IRect a, IRect b)
+    public static bool IsContainCenterPoint(IRect a, IRect b)
     {
         var point = a.GetRectInfo();
         var p1 = point[1];
@@ -78,17 +78,34 @@ public class GeometryTool
         var zNormalDir = zDir/height;
 
         var testPoint = b.GetRectInfo();
+
+        //只判斷中心點
+        var center=Vector3.zero;
+        foreach (var tPoint in testPoint)
+            center = center+ tPoint;
+        center = center* 0.25f;
+
+        var vec = center - p2;
+        var xValue = Vector3.Dot(vec, xNormalDir);
+        var zValue = Vector3.Dot(vec, zNormalDir);
+
+        bool test = xValue > 0 && xValue < width && zValue > 0 && zValue < height;
+        return test;
+
+        /*
         foreach (var tPoint in testPoint)
         {
             var vec = tPoint - p2;
             var xValue = Vector3.Dot(vec, xNormalDir);
             var zValue = Vector3.Dot(vec, zNormalDir);
 
-            if (xValue > 0 && xValue < width && zValue > 0 && zValue < height)
-                return true;
+            bool test = xValue > 0 && xValue < width && zValue > 0 && zValue < height;
+            if (!test)
+                return false;
         }
 
-        return false;
+        return true;
+        */
     }
 
     public static void GetEdge(IRect rect, int index, out Vector3 from, out Vector3 to)

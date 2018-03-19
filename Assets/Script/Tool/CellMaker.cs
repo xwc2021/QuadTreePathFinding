@@ -52,10 +52,10 @@ public class CellMaker : MonoBehaviour {
     int maxSplitLevel=5;
     QuadTreeConnectedNode quadTreeConnectedNode;
 
-    public void CollectDrawRect(List<IRect> list)
+    public void CollectDrawRect(List<IRect> list,bool outer)
     {
         if(quadTreeConnectedNode!=null)
-            quadTreeConnectedNode.CollectDrawRect(list);
+            quadTreeConnectedNode.CollectDrawRect(list,outer);
     }
 
     //除了是四叉樹，所有葉節點彼此還會相連
@@ -76,8 +76,8 @@ public class CellMaker : MonoBehaviour {
             foreach (var node in nowTestNodes)
             {
                 var a = NodeIsIntersectWithColliderRects(node, colliderRects);
-                var b = NodeIsContainColliderRects(node, colliderRects);
-                if (a || b)//如果有rect和node相交或是在node裡面
+                var b = NodeIsContainColliderRectsVertex(node, colliderRects);
+                if (a || b)//如果有rect和node相交或是頂點在node裡面
                     nextTestNodes.AddRange(node.SplitTo4());//就把node分成4塊，並加入下一輪的測試清單
                 else
                 {
@@ -97,8 +97,8 @@ public class CellMaker : MonoBehaviour {
 
     void SetIsOuter(QuadTreeConnectedNode node, IRect[] colliderRects)
     {
-        //如果node在rect裡面
-        if (NodeIsInColliderRects(node, colliderRects))
+        //如果node的中心點在rect裡面
+        if (NodeCenterIsInColliderRects(node, colliderRects))
             node.SetIsOuter(false);
         else
             node.SetIsOuter(true);
@@ -115,23 +115,23 @@ public class CellMaker : MonoBehaviour {
         return false;
     }
 
-    bool NodeIsContainColliderRects(QuadTreeConnectedNode node, IRect[] colliderRects)
+    bool NodeIsContainColliderRectsVertex(QuadTreeConnectedNode node, IRect[] colliderRects)
     {
         for (var i = 0; i < colliderRects.Length; ++i)
         {
             var rect = colliderRects[i];
-            if (node.IsContainRect(rect))
+            if (node.IsContainRectVertex(rect))
                 return true;
         }
         return false;
     }
 
-    bool NodeIsInColliderRects(QuadTreeConnectedNode node, IRect[] colliderRects)
+    bool NodeCenterIsInColliderRects(QuadTreeConnectedNode node, IRect[] colliderRects)
     {
         for (var i = 0; i < colliderRects.Length; ++i)
         {
             var rect = colliderRects[i];
-            if (GeometryTool.IsContain(rect,node))
+            if (GeometryTool.IsContainCenterPoint(rect,node))
                 return true;
         }
         return false;

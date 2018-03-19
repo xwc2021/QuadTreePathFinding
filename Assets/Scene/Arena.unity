@@ -573,7 +573,7 @@ MonoBehaviour:
   border: {fileID: 153276727}
   cellCountX: 2
   cellCountZ: 2
-  maxSplitLevel: 6
+  maxSplitLevel: 7
   P0: {fileID: 1045846618}
   P1: {fileID: 196221603}
   P2: {fileID: 1332596816}
