@@ -82,9 +82,7 @@ public class CellMaker : MonoBehaviour {
                 if (a || b)//如果有rect和node相交或是頂點在node裡面
                     nextTestNodes.AddRange(node.SplitTo4());//就把node分成4塊，並加入下一輪的測試清單
                 else
-                {
                     SetIsOuter(node, colliderRects);
-                }
             }
             nowTestNodes = nextTestNodes.ToArray();
             nextTestNodes.Clear();

@@ -132,6 +132,9 @@ public class QuadTreeConnectedNode:IRect {
 
     void MakeConnectedHorizontal(QuadTreeConnectedNode leftNode, QuadTreeConnectedNode rightNode)
     {
+        if (!leftNode.isOuter || !rightNode.isOuter)
+            return;
+
         //如果Pn裡的2個node都沒有child node，就為該2個node建立連結
         if (!leftNode.HasChild() && !rightNode.HasChild())
         {
@@ -165,6 +168,9 @@ public class QuadTreeConnectedNode:IRect {
 
     void MakeConnectedVertical(QuadTreeConnectedNode downNode, QuadTreeConnectedNode upNode)
     {
+        if (!downNode.isOuter || !upNode.isOuter)
+           return;
+
         //如果Pn裡的2個node都沒有child node，就為該2個node建立連結
         if (!downNode.HasChild() && !upNode.HasChild())
         {
@@ -268,14 +274,30 @@ public class QuadTreeConnectedNode:IRect {
                 ConnectHorizontal();
         }
 
+        int GetOuterCount(List<QuadTreeConnectedNode> buffer)
+        {
+            int count = 0;
+            for (var i = 0; i < buffer.Count; ++i)
+            {
+                var rightNode = buffer[i];
+                if (rightNode.isOuter)
+                    ++count;
+            }
+            return count;
+        }
+
         void ConnectVertical()
         {
             //1對1
             if (firstBuffer.Count == 1 && secondBuffer.Count == 1)
             {
                 var leftNode = firstBuffer[0];
-                leftNode.rightLink = new QuadTreeConnectedNode[1];
                 var rightNode = secondBuffer[0];
+
+                if (!leftNode.isOuter || !rightNode.isOuter)
+                    return;
+
+                leftNode.rightLink = new QuadTreeConnectedNode[1];
                 rightNode.leftLink = new QuadTreeConnectedNode[1];
 
                 leftNode.rightLink[0] = rightNode;
@@ -288,15 +310,23 @@ public class QuadTreeConnectedNode:IRect {
             if (firstBuffer.Count == 1 && secondBuffer.Count > 1)
             {
                 var leftNode = firstBuffer[0];
-                leftNode.rightLink = new QuadTreeConnectedNode[secondBuffer.Count];
+                if (!leftNode.isOuter)
+                    return;
 
+                leftNode.rightLink = new QuadTreeConnectedNode[GetOuterCount(secondBuffer)];
+
+                var nowIndex = 0;
                 for (var i = 0; i < secondBuffer.Count; ++i)
                 {
                     var rightNode = secondBuffer[i];
+                    if (!rightNode.isOuter)
+                        continue;
+
                     rightNode.leftLink = new QuadTreeConnectedNode[1];
                     rightNode.leftLink[0] = leftNode;
 
-                    leftNode.rightLink[i] = rightNode;
+                    leftNode.rightLink[nowIndex] = rightNode;
+                    ++nowIndex;
 
                     horizontalLinks.Add(new LinkInfo(leftNode, rightNode));
                 }
@@ -306,15 +336,23 @@ public class QuadTreeConnectedNode:IRect {
             if (firstBuffer.Count >1 && secondBuffer.Count== 1)
             {
                 var rightNode = secondBuffer[0];
-                rightNode.leftLink = new QuadTreeConnectedNode[firstBuffer.Count];
+                if (!rightNode.isOuter)
+                    return;
 
+                rightNode.leftLink = new QuadTreeConnectedNode[GetOuterCount(firstBuffer)];
+
+                var nowIndex = 0;
                 for (var i = 0; i < firstBuffer.Count; ++i)
                 {
                     var leftNode = firstBuffer[i];
+                    if (!leftNode.isOuter)
+                        continue;
+
                     leftNode.rightLink = new QuadTreeConnectedNode[1];
                     leftNode.rightLink[0] = rightNode;
 
-                    rightNode.leftLink[i] = leftNode;
+                    rightNode.leftLink[nowIndex] = leftNode;
+                    ++nowIndex;
 
                     horizontalLinks.Add(new LinkInfo(leftNode,rightNode));
                 }
@@ -327,8 +365,12 @@ public class QuadTreeConnectedNode:IRect {
             if (firstBuffer.Count == 1 && secondBuffer.Count == 1)
             {
                 var downNode = firstBuffer[0];
-                downNode.upLink = new QuadTreeConnectedNode[1];
                 var upNode = secondBuffer[0];
+
+                if (!downNode.isOuter || !upNode.isOuter)
+                    return;
+
+                downNode.upLink = new QuadTreeConnectedNode[1];
                 upNode.downLink = new QuadTreeConnectedNode[1];
 
                 downNode.upLink[0] = upNode;
@@ -341,15 +383,23 @@ public class QuadTreeConnectedNode:IRect {
             if (firstBuffer.Count == 1 && secondBuffer.Count > 1)
             {
                 var downNode = firstBuffer[0];
-                downNode.upLink = new QuadTreeConnectedNode[secondBuffer.Count];
+                if (!downNode.isOuter)
+                    return;
 
+                downNode.upLink = new QuadTreeConnectedNode[GetOuterCount(secondBuffer)];
+
+                var nowIndex = 0;
                 for (var i = 0; i < secondBuffer.Count; ++i)
                 {
                     var upNode = secondBuffer[i];
+                    if (!upNode.isOuter)
+                        continue;
+
                     upNode.downLink = new QuadTreeConnectedNode[1];
                     upNode.downLink[0] = downNode;
 
-                    downNode.upLink[i] = upNode;
+                    downNode.upLink[nowIndex] = upNode;
+                    ++nowIndex;
 
                     verticalLinks.Add(new LinkInfo(downNode, upNode));
                 }
@@ -359,15 +409,23 @@ public class QuadTreeConnectedNode:IRect {
             if (firstBuffer.Count > 1 && secondBuffer.Count == 1)
             {
                 var upNode = secondBuffer[0];
-                upNode.downLink = new QuadTreeConnectedNode[firstBuffer.Count];
+                if (!upNode.isOuter)
+                    return;
 
+                upNode.downLink = new QuadTreeConnectedNode[GetOuterCount(firstBuffer)];
+
+                var nowIndex = 0;
                 for (var i = 0; i < firstBuffer.Count; ++i)
                 {
                     var downNode = firstBuffer[i];
+                    if (!downNode.isOuter)
+                        continue;
+
                     downNode.upLink = new QuadTreeConnectedNode[1];
                     downNode.upLink[0] = upNode;
 
-                    upNode.downLink[i] = downNode;
+                    upNode.downLink[nowIndex] = downNode;
+                    ++nowIndex;
 
                     verticalLinks.Add(new LinkInfo(downNode, upNode));
                 }
