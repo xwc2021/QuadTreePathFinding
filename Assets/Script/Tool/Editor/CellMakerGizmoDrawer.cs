@@ -24,8 +24,6 @@ public class CellMakerGizmoDrawer {
         foreach (var rect in OuterQuadRect)
             DrawRect(rect, quadTreeOuter);
 
-        //Debug.Log(OuterQuadRect.Count);
-
         //innner
         var InnerQuadRect = target.GetInnerQuadRect();
         foreach (var rect in InnerQuadRect)

@@ -17,20 +17,19 @@ public class CellMakerEditor : Editor {
 
         DrawDefaultInspector();
 
-        if (GUILayout.Button("Get All BoxCollider And Generate Rect"))
+        var OuterQuadRectCount = cellMaker.GetOuterQuadRect().Count;
+        GUILayout.Label("OuterQuadRectCount:"+OuterQuadRectCount);
+
+        if (GUILayout.Button("Get All BoxCollider & Generate QuadTree"))
         {
             cellMaker.GetAllBoxColliderMetaInfoInSceneAndGenerateRect();
-            SceneView.RepaintAll();
-            Debug.Log("Get");
-        }
 
-        if (GUILayout.Button("Generate Nav Cell"))
-        {
             cellMaker.GenerateQuadTreeConnectedNode();
             cellMaker.MakeConnected();
 
             cellMaker.CollectOuterQuadRect();
             cellMaker.CollectInnerQuadRect();
+
             SceneView.RepaintAll();
             Debug.Log("Generate");
         }

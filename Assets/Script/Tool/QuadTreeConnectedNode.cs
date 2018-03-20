@@ -132,13 +132,13 @@ public class QuadTreeConnectedNode:IRect {
 
     void MakeConnectedHorizontal(QuadTreeConnectedNode leftNode, QuadTreeConnectedNode rightNode)
     {
-        //https://plus.google.com/u/0/+XiangweiChiou/posts/EET3zRE8Awz
-        if (!leftNode.isOuter || !rightNode.isOuter)
-            return;
-
         //如果Pn裡的2個node都沒有child node，就為該2個node建立連結
         if (!leftNode.HasChild() && !rightNode.HasChild())
         {
+            //https://plus.google.com/u/0/+XiangweiChiou/posts/EET3zRE8Awz
+            if (!leftNode.isOuter || !rightNode.isOuter)
+                return;
+
             leftNode.rightLink = new QuadTreeConnectedNode[1];
             leftNode.rightLink[0] = rightNode;
 
@@ -169,13 +169,13 @@ public class QuadTreeConnectedNode:IRect {
 
     void MakeConnectedVertical(QuadTreeConnectedNode downNode, QuadTreeConnectedNode upNode)
     {
-        //https://plus.google.com/u/0/+XiangweiChiou/posts/EET3zRE8Awz
-        if (!downNode.isOuter || !upNode.isOuter)
-           return;
-
         //如果Pn裡的2個node都沒有child node，就為該2個node建立連結
         if (!downNode.HasChild() && !upNode.HasChild())
         {
+            //https://plus.google.com/u/0/+XiangweiChiou/posts/EET3zRE8Awz
+            if (!downNode.isOuter || !upNode.isOuter)
+                return;
+
             downNode.upLink = new QuadTreeConnectedNode[1];
             downNode.upLink[0] = upNode;
 

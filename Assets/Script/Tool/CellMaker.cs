@@ -52,6 +52,7 @@ public class CellMaker : MonoBehaviour {
 
     [SerializeField]
     int maxSplitLevel=5;
+
     QuadTreeConnectedNode quadTreeConnectedNode;
 
     public void CollectDrawRect(List<IRect> list,bool outer)
