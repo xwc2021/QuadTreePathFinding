@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class CellMaker : MonoBehaviour {
 
+    public bool onlyLeafNode = true;
     public bool showNodeLink = true;
 
     public BoxColliderMetaInfo[] boxColliderMetaInfoList;
@@ -42,7 +43,7 @@ public class CellMaker : MonoBehaviour {
     public void CollectDrawRect(List<IRect> list,bool outer)
     {
         if(quadTreeConnectedNode!=null)
-            quadTreeConnectedNode.CollectDrawRect(list,outer);
+            quadTreeConnectedNode.CollectDrawRect(list,outer, onlyLeafNode);
     }
 
     //除了是四叉樹，所有葉節點彼此還會相連

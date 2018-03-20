@@ -561,6 +561,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1af19dd64ebf8041a50f4c1cbf4be10, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  onlyLeaf: 0
   showNodeLink: 0
   boxColliderMetaInfoList:
   - {fileID: 99291513}
@@ -569,11 +570,7 @@ MonoBehaviour:
   - {fileID: 417644156}
   - {fileID: 2038760180}
   - {fileID: 2070600754}
-  smallestX: 1
-  smallestZ: 1
   border: {fileID: 153276727}
-  cellCountX: 2
-  cellCountZ: 2
   maxSplitLevel: 6
   P0: {fileID: 1045846618}
   P1: {fileID: 196221603}

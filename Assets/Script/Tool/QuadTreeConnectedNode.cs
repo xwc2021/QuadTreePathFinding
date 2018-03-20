@@ -81,16 +81,26 @@ public class QuadTreeConnectedNode:IRect {
         return centerPoint;
     }
 
-    public void CollectDrawRect(List<IRect> list,bool outer)
+    public void CollectDrawRect(List<IRect> list,bool outer,bool onlyLeafNode)
     {
-        if (!HasChild() &&　this.isOuter== outer)
-            list.Add(this);
+        if (onlyLeafNode)
+        {
+            var isLeafNode = !HasChild();
+            if (isLeafNode && this.isOuter == outer)
+                list.Add(this);
+        }
+        else
+        {
+            if (this.isOuter == outer)
+                list.Add(this);
+        }
+        
 
         if (childs == null)
             return; 
 
         foreach (var child in childs)
-            child.CollectDrawRect(list, outer);
+            child.CollectDrawRect(list, outer, onlyLeaf);
     }
 
     public class LinkInfo

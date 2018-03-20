@@ -20,6 +20,9 @@ public class CellMakerEditor : Editor {
         var OuterQuadRectCount = cellMaker.GetOuterQuadRect().Count;
         GUILayout.Label("OuterQuadRectCount:"+OuterQuadRectCount);
 
+        var InnerQuadRectCount = cellMaker.GetInnerQuadRect().Count;
+        GUILayout.Label("InnerQuadRectCount:" + InnerQuadRectCount);
+
         if (GUILayout.Button("Get All BoxCollider & Generate QuadTree"))
         {
             cellMaker.GetAllBoxColliderMetaInfoInSceneAndGenerateRect();
