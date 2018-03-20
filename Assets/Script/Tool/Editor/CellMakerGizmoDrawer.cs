@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using DiyAStar;
 
 public class CellMakerGizmoDrawer {
 
@@ -29,7 +30,9 @@ public class CellMakerGizmoDrawer {
         foreach (var rect in InnerQuadRect)
             DrawRect(rect, quadTreeInner);
 
-        
+
+        var nodes = target.GetPathList();
+        DrawPathList(nodes, target.nodeSize);
 
         if (target.showNodeLink)
         {
@@ -45,6 +48,7 @@ public class CellMakerGizmoDrawer {
         }
     }
 
+    static Color nodeColor = Color.green;
     static Color colliderColor=Color.green;
     static Color quadTreeOuter = Color.yellow;
     static Color quadTreeInner = Color.red;
@@ -66,6 +70,15 @@ public class CellMakerGizmoDrawer {
     {
         Gizmos.color = color;
         Gizmos.DrawLine(from.GetCenter(),to.GetCenter());
+    }
+
+    public static void DrawPathList(IGraphNode[] nodes,float nodeSize)
+    {
+        Gizmos.color = nodeColor;
+        foreach (var node in nodes)
+        {
+            Gizmos.DrawSphere(node.GetPosition(), nodeSize);
+        }
     }
 
 }

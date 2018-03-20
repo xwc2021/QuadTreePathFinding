@@ -1,8 +1,102 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DiyAStar;
 
-public class QuadTreeConnectedNode:IRect {
+public static class IGraphNodeExtensions
+{
+    public static Vector3 GetPosition(this IGraphNode target)
+    {
+        var node = target as QuadTreeConnectedNode;
+        return node.GetPosition();
+    }
+}
+
+public class QuadTreeConnectedNode : IRect, IGraphNode {
+
+    public int EdgeCount()
+    {
+        return edges.Count;
+    }
+    List<IGraphNode> edges;
+    List<float> costs;
+    public float GetEdgeCost(int index) { return costs[index]; }
+    public IGraphNode GetEdge(int index) { return edges[index]; }
+    public float getAccumulationCost(){return accumulationCost;}
+
+    IGraphNode comeFrom;
+    public IGraphNode getComeFrom() { return comeFrom; }
+    public void setComeFrom(IGraphNode node) { comeFrom = node; }
+    bool visited=false;
+    float accumulationCost = 0;
+    public void resetPathInfo()
+    {
+        visited = false;
+        comeFrom = null;
+        accumulationCost = 0;
+    }
+
+    public Vector3 GetPosition(){return centerPoint;}
+
+    float GetDistanceTo(IGraphNode target)
+    {
+        Vector3 temp = (target as QuadTreeConnectedNode).GetPosition() - GetPosition();
+        return temp.magnitude;
+    }
+    public float getEvaluation(IGraphNode target)
+    {
+        return GetDistanceTo(target);
+    }
+
+    string nodeKey;
+    public string getNodeKey() { return nodeKey; }
+    public bool isVisited() { return visited; }
+    public void setVisited() { visited = true; }
+    public void setAccumulationCost(float pCost) { accumulationCost = pCost; }
+
+    void AddCosts(QuadTreeConnectedNode[] links)
+    {
+        foreach (var link in links)
+        {
+            float cost = GetDistanceTo(link);
+            costs.Add(cost);
+        }
+    }
+
+    public void GenerateGraphNodeData()
+    {
+        bool isLeaf = !HasChild();
+        if (isLeaf)
+        {
+            edges = new List<IGraphNode>();
+            costs = new List<float>();
+            if (leftLink != null)
+            {
+                edges.AddRange(leftLink);
+                AddCosts(leftLink);
+            }
+            if (downLink != null)
+            {
+                edges.AddRange(downLink);
+                AddCosts(downLink);
+            }
+            if (rightLink != null)
+            {
+                edges.AddRange(rightLink);
+                AddCosts(rightLink);
+            }
+            if (upLink != null)
+            {
+                edges.AddRange(upLink);
+                AddCosts(upLink);
+            }
+        }
+        else
+        {
+            foreach (var child in childs)
+                child.GenerateGraphNodeData();
+        }
+    }
 
     bool isOuter = true;
     public void SetIsOuter(bool b)
@@ -53,13 +147,18 @@ public class QuadTreeConnectedNode:IRect {
         return childs != null;
     }
 
+    bool IsContainPoint(Vector3 point)
+    {
+        return point.x > minX && point.x < maxX && point.z > minZ && point.z < maxZ ;
+    }
+
     public bool IsContainRectVertex(IRect rect)
     {
         var testPoints = rect.GetRectInfo();
         for (var i = 0; i < testPoints.Length; ++i)
         {
             var nowPoint = testPoints[i];
-            if (nowPoint.x > minX && nowPoint.x < maxX && nowPoint.z > minZ && nowPoint.z < maxZ)
+            if (IsContainPoint(nowPoint))
                 return true;
         }
         return false;
@@ -79,6 +178,23 @@ public class QuadTreeConnectedNode:IRect {
     public Vector3 GetCenter()
     {
         return centerPoint;
+    }
+
+    public void GetGraphNode(Vector3 pos, ref IGraphNode  graphNode)
+    {
+        if (IsContainPoint(pos))
+        {
+            if (HasChild())
+            {
+                for (var i = 0; i < 4; ++i)
+                {
+                    var child = childs[i];
+                    child.GetGraphNode(pos, ref graphNode);
+                }
+            }
+            else
+                graphNode = this;
+        }
     }
 
     public void CollectDrawRect(List<IRect> list,bool outer,bool onlyLeafNode)

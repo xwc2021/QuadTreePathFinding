@@ -27,12 +27,16 @@ public class CellMakerEditor : Editor {
         var InnerQuadRectCount = cellMaker.GetInnerQuadRect().Count;
         GUILayout.Label("InnerQuadRectCount:" + InnerQuadRectCount);
 
+        var QuadRectCount = OuterQuadRectCount+ InnerQuadRectCount;
+        GUILayout.Label("QuadRectCount:" + QuadRectCount);
+
         if (GUILayout.Button("Get All BoxCollider & Generate QuadTree"))
         {
             cellMaker.GetAllBoxColliderMetaInfoInSceneAndGenerateRect();
 
             cellMaker.GenerateQuadTreeConnectedNode();
             cellMaker.MakeConnected();
+            cellMaker.GenerateGraphNodeData();
 
             cellMaker.CollectOuterQuadRect();
             cellMaker.CollectInnerQuadRect();
@@ -44,6 +48,12 @@ public class CellMakerEditor : Editor {
         if (GUILayout.Button("TestIsIntersect"))
         {
             cellMaker.TestIsIntersect();
+        }
+
+        if (GUILayout.Button("TestPathFind"))
+        {
+            cellMaker.TestPathFind();
+            SceneView.RepaintAll();
         }
     }
 }

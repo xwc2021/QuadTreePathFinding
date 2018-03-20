@@ -1,8 +1,45 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DiyAStar;
 
 public class CellMaker : MonoBehaviour {
+
+    public float nodeSize = 0.25f;
+
+    [SerializeField]
+    Transform from;
+
+    [SerializeField]
+    Transform destination;
+
+    public IGraphNode[] GetPathList()
+    {
+        return pathNodes.ToArray();
+    }
+
+    List<IGraphNode> pathNodes=new List<IGraphNode>();
+    public void TestPathFind()
+    {
+        pathNodes =FindPath(from.position, destination.position);
+        Debug.Log("pathNodes"+pathNodes.Count);
+    }
+
+    AStarPathFinder pathFinder =new AStarPathFinder();
+
+    public List<IGraphNode> FindPath(Vector3 from ,Vector3 destination)
+    {
+        AStarPathFinder.resetIGraphNode(outerQuadNode);
+
+        IGraphNode nodeFrom=null, nodeDestination = null;
+        quadTreeConnectedNode.GetGraphNode(from,ref nodeFrom);
+        quadTreeConnectedNode.GetGraphNode(destination, ref nodeDestination);
+
+        Debug.Log(nodeFrom);
+        Debug.Log(nodeDestination);
+
+        return pathFinder.findPath(nodeFrom, nodeDestination);
+    }
 
     public bool onlyLeafNode = true;
     public bool showNodeLink = true;
@@ -45,6 +82,12 @@ public class CellMaker : MonoBehaviour {
     {
         if(quadTreeConnectedNode!=null)
             quadTreeConnectedNode.CollectDrawRect(list,outer, onlyLeafNode);
+    }
+
+    public void CollectDrawRectOnlyLeafNode(List<IRect> list, bool outer)
+    {
+        if (quadTreeConnectedNode != null)
+            quadTreeConnectedNode.CollectDrawRect(list, outer, true);
     }
 
     //除了是四叉樹，所有葉節點彼此還會相連
@@ -90,6 +133,11 @@ public class CellMaker : MonoBehaviour {
     {
         QuadTreeConnectedNode.ClearLinks();
         quadTreeConnectedNode.MakeConnected();
+    }
+
+    public void GenerateGraphNodeData()
+    {
+        quadTreeConnectedNode.GenerateGraphNodeData();
     }
 
     void SetIsOuter(QuadTreeConnectedNode node, IRect[] colliderRects)
@@ -150,9 +198,18 @@ public class CellMaker : MonoBehaviour {
         Debug.Log(result);
     }
 
+    IGraphNode[] outerQuadNode;
     List<IRect> outerQuadRect = new List<IRect>();
     public void CollectOuterQuadRect()
     {
+        outerQuadRect.Clear();
+        CollectDrawRectOnlyLeafNode(outerQuadRect, true);
+
+        //從IRect轉成IGraphNode
+        outerQuadNode = new IGraphNode[outerQuadRect.Count];
+        for (var i = 0; i < outerQuadRect.Count; ++i)
+            outerQuadNode[i] = outerQuadRect[i] as IGraphNode;
+
         outerQuadRect.Clear();
         CollectDrawRect(outerQuadRect, true);
     }
