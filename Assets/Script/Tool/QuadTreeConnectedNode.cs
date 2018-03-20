@@ -445,7 +445,7 @@ public class QuadTreeConnectedNode:IRect {
 
     void connectTwoSide(bool isLeftRight, List<QuadTreeConnectedNode> firstSideNodes, List<QuadTreeConnectedNode> secondSideNodes)
     {
-        Debug.Log(firstSideNodes.Count + "," + secondSideNodes.Count);
+        //Debug.Log(firstSideNodes.Count + "," + secondSideNodes.Count);
         var compareHelper = new CompareHelper(isLeftRight, firstSideNodes, secondSideNodes);
 
         compareHelper.AddFirstSide();

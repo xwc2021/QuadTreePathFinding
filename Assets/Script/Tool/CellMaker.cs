@@ -9,24 +9,8 @@ public class CellMaker : MonoBehaviour {
     public BoxColliderMetaInfo[] boxColliderMetaInfoList;
     public IRect[] colliderRects;
 
-    //分割的臨界值
-    [SerializeField]
-    float smallestX=1;
-
-    [SerializeField]
-    float smallestZ=1;
-
     [SerializeField]
     Transform border;
-
-    [SerializeField]
-    int cellCountX = 10;
-
-    [SerializeField]
-    int cellCountZ = 10;
-
-    public int GetCellCountX() { return cellCountX; }
-    public int GetCellCountZ() { return cellCountZ; }
 
     public Vector3 GetDirX() { return transform.right; }
     public Vector3 GetDirZ() { return transform.forward; }
