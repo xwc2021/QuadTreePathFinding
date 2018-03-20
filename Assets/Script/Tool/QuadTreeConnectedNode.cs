@@ -132,6 +132,7 @@ public class QuadTreeConnectedNode:IRect {
 
     void MakeConnectedHorizontal(QuadTreeConnectedNode leftNode, QuadTreeConnectedNode rightNode)
     {
+        //https://plus.google.com/u/0/+XiangweiChiou/posts/EET3zRE8Awz
         if (!leftNode.isOuter || !rightNode.isOuter)
             return;
 
@@ -168,6 +169,7 @@ public class QuadTreeConnectedNode:IRect {
 
     void MakeConnectedVertical(QuadTreeConnectedNode downNode, QuadTreeConnectedNode upNode)
     {
+        //https://plus.google.com/u/0/+XiangweiChiou/posts/EET3zRE8Awz
         if (!downNode.isOuter || !upNode.isOuter)
            return;
 
