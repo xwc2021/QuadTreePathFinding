@@ -561,7 +561,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1af19dd64ebf8041a50f4c1cbf4be10, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onlyLeaf: 0
+  onlyLeafNode: 0
   showNodeLink: 0
   boxColliderMetaInfoList:
   - {fileID: 99291513}

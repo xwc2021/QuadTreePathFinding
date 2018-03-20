@@ -100,7 +100,7 @@ public class QuadTreeConnectedNode:IRect {
             return; 
 
         foreach (var child in childs)
-            child.CollectDrawRect(list, outer, onlyLeaf);
+            child.CollectDrawRect(list, outer, onlyLeafNode);
     }
 
     public class LinkInfo

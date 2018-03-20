@@ -17,6 +17,10 @@ public class CellMakerEditor : Editor {
 
         DrawDefaultInspector();
 
+        var splitLevel =cellMaker.GetMaxSplitLeve();
+        var columnCount = Mathf.Pow(2, splitLevel);
+        GUILayout.Label("if not using quad tree:" + Mathf.Pow(columnCount, 2));
+
         var OuterQuadRectCount = cellMaker.GetOuterQuadRect().Count;
         GUILayout.Label("OuterQuadRectCount:"+OuterQuadRectCount);
 

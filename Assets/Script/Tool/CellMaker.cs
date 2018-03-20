@@ -37,6 +37,7 @@ public class CellMaker : MonoBehaviour {
 
     [SerializeField]
     int maxSplitLevel=5;
+    public int GetMaxSplitLeve() { return maxSplitLevel; }
 
     QuadTreeConnectedNode quadTreeConnectedNode;
 
