@@ -31,8 +31,11 @@ public class CellMakerGizmoDrawer {
             DrawRect(rect, quadTreeInner);
 
 
-        var nodes = target.GetPathList();
+        var nodes = target.GetRawPath();
         DrawPathList(nodes, target.nodeSize);
+
+        var points = target.GetModifyPath();
+        DrawPathList(points,target.modifyNodeSize);
 
         if (target.showNodeLink)
         {
@@ -49,6 +52,7 @@ public class CellMakerGizmoDrawer {
     }
 
     static Color nodeColor = Color.green;
+    static Color modifyNodeColor = Color.blue;
     static Color colliderColor=Color.green;
     static Color quadTreeOuter = Color.yellow;
     static Color quadTreeInner = Color.red;
@@ -79,6 +83,13 @@ public class CellMakerGizmoDrawer {
         {
             Gizmos.DrawSphere(node.GetPosition(), nodeSize);
         }
+    }
+
+    public static void DrawPathList(Vector3[] points, float nodeSize)
+    {
+        Gizmos.color = modifyNodeColor;
+        foreach (var p in points)
+            Gizmos.DrawSphere(p, nodeSize);
     }
 
 }

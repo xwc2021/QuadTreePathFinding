@@ -6,6 +6,7 @@ using DiyAStar;
 public class CellMaker : MonoBehaviour {
 
     public float nodeSize = 0.25f;
+    public float modifyNodeSize = 0.125f;
 
     [SerializeField]
     Transform from;
@@ -13,16 +14,23 @@ public class CellMaker : MonoBehaviour {
     [SerializeField]
     Transform destination;
 
-    public IGraphNode[] GetPathList()
+    public IGraphNode[] GetRawPath()
     {
-        return pathNodes.ToArray();
+        return rawNodes.ToArray();
     }
 
-    List<IGraphNode> pathNodes=new List<IGraphNode>();
+    public Vector3[] GetModifyPath()
+    {
+        return modifyNodes.ToArray();
+    }
+
+    List<IGraphNode> rawNodes =new List<IGraphNode>();
+    List<Vector3> modifyNodes = new List<Vector3>();
     public void TestPathFind()
     {
-        pathNodes =FindPath(from.position, destination.position);
-        Debug.Log("pathNodes"+pathNodes.Count);
+        rawNodes = FindPath(from.position, destination.position);
+        modifyNodes=ModifyPath(rawNodes);
+        Debug.Log("rawNodes" + rawNodes.Count);
     }
 
     AStarPathFinder pathFinder =new AStarPathFinder();
@@ -35,10 +43,36 @@ public class CellMaker : MonoBehaviour {
         quadTreeConnectedNode.GetGraphNode(from,ref nodeFrom);
         quadTreeConnectedNode.GetGraphNode(destination, ref nodeDestination);
 
-        Debug.Log(nodeFrom);
-        Debug.Log(nodeDestination);
-
         return pathFinder.findPath(nodeFrom, nodeDestination);
+    }
+
+    Vector3 GetCrossPoint(IGraphNode p0, IGraphNode p1)
+    {
+        var n0 = p0 as QuadTreeConnectedNode;
+        var n1= p1 as QuadTreeConnectedNode;
+
+        //判斷是水平還是垂直
+        var vec =n1.GetPosition() - n0.GetPosition();
+
+        bool isHorizontal = Mathf.Abs(vec.x) > Mathf.Abs(vec.z);
+        float ratio = isHorizontal? n0.halfWidth / Mathf.Abs(vec.x): n0.halfHeight / Mathf.Abs(vec.z);
+
+        //相似三角形的1邊ratio會=其他邊ratio
+        return n0.GetPosition() + vec * ratio;
+    }
+
+    //路徑修剪
+    //https://plus.google.com/u/0/+XiangweiChiou/posts/X12EPrwgtPM
+    List<Vector3> ModifyPath(List<IGraphNode> rawNodes)
+    {
+        var collect = new List<Vector3>();
+        for (var i = 0; i < rawNodes.Count - 1; ++i)
+        {
+            var point = GetCrossPoint(rawNodes[i], rawNodes[i + 1]);
+            collect.Add(point);
+        }
+
+        return collect;
     }
 
     public bool onlyLeafNode = true;

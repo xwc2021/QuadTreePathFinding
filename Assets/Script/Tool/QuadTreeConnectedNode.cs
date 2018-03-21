@@ -109,6 +109,8 @@ public class QuadTreeConnectedNode : IRect, IGraphNode {
     float centerX, centerZ;
     float Height;
     float Width;
+    public float halfHeight;
+    public float halfWidth;
     public QuadTreeConnectedNode(float minX, float maxX, float minZ, float maxZ,int level) {
         this.minX = minX;
         this.maxX = maxX;
@@ -119,6 +121,8 @@ public class QuadTreeConnectedNode : IRect, IGraphNode {
         this.centerZ = 0.5f * (minZ + maxZ);
         this.Width = maxX - minX;
         this.Height = maxZ - minZ;
+        this.halfWidth = 0.5f* this.Width;
+        this.halfHeight = 0.5f * this.Height;
 
         points = new Vector3[4];
         points[0] = new Vector3(minX, 0, minZ);
