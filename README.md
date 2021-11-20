@@ -1,4 +1,4 @@
-# NetworkBattle
+# QuadTreePathFinding
 
 quadtree path finding
 [link](https://gpnnotes.blogspot.com/2018/10/1-quad-tree-path-finding-3.html)
