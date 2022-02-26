@@ -122,29 +122,31 @@ public class CellMaker : MonoBehaviour
             quadTreeConnectedNode.CollectDrawRect(list, outer, true);
     }
 
-    //除了是四叉樹，所有葉節點彼此還會相連
+    // 除了是四叉樹，所有葉節點彼此還會相連
     public void GenerateQuadTreeConnectedNode()
     {
         var origin = GetOrigin();
         var border = GetBorder();
         quadTreeConnectedNode = new QuadTreeConnectedNode(origin.x, border.x, origin.z, border.z, 0);
 
-        //第1次直接split
+        // 第1次直接split
         var nowTestNodes = quadTreeConnectedNode.SplitTo4();
         var nextTestNodes = new List<QuadTreeConnectedNode>();
 
-        //進行分裂
+        // 進行分裂
         int count = maxSplitLevel - 1;
         for (var i = 1; i <= count; ++i)
         {
+            // todo: 這裡暴力的把node和所有rect測試一次(雖然有提早return
+            // 也許可以在每個node寫入需要測式的rect清單，做一些優化
             foreach (var node in nowTestNodes)
             {
                 var a = NodeIsIntersectWithColliderRects(node, colliderRects);
                 var b = NodeIsContainColliderRectsVertex(node, colliderRects);
-                if (a || b)//如果有rect和node相交或是頂點在node裡面
+                if (a || b) // 如果有rect和node相交或是頂點在node裡面
                 {
-                    //就把node分成4塊，並加入下一輪的測試清單
-                    //有分裂的話outer=true(預設值)
+                    // 就把node分成4塊，並加入下一輪的測試清單
+                    // 有分裂的話outer=true(預設值)
                     nextTestNodes.AddRange(node.SplitTo4());
                 }
                 else
@@ -154,7 +156,7 @@ public class CellMaker : MonoBehaviour
             nextTestNodes.Clear();
         }
 
-        //分裂完後，還要測式1次
+        // 分裂完後，還要測式1次
         foreach (var node in nowTestNodes)
         {
             SetIsOuter(node, colliderRects);
@@ -174,7 +176,7 @@ public class CellMaker : MonoBehaviour
 
     void SetIsOuter(QuadTreeConnectedNode node, IRect[] colliderRects)
     {
-        //如果node的中心點在rect裡面
+        // 如果node的中心點在rect裡面
         if (NodeCenterIsInColliderRects(node, colliderRects))
             node.SetIsOuter(false);
         else
@@ -239,7 +241,7 @@ public class CellMaker : MonoBehaviour
         outerQuadRect.Clear();
         CollectDrawRectOnlyLeafNode(outerQuadRect, true);
 
-        //從IRect轉成IGraphNode
+        // 從IRect轉成IGraphNode
         outerQuadNode = new IGraphNode[outerQuadRect.Count];
         for (var i = 0; i < outerQuadRect.Count; ++i)
             outerQuadNode[i] = outerQuadRect[i] as IGraphNode;

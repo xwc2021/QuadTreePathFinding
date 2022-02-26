@@ -27,17 +27,17 @@ public class BoxColliderMetaInfo : MonoBehaviour, IRect
 
         var boxColliderSize = boxCollider.size;
         var bosLossyScale = transform.lossyScale;
-        var bosFinalSize = new Vector3(boxColliderSize.x * bosLossyScale.x, boxColliderSize.y * bosLossyScale.y, boxColliderSize.z * bosLossyScale.z);
+        var boxFinalSize = new Vector3(boxColliderSize.x * bosLossyScale.x, boxColliderSize.y * bosLossyScale.y, boxColliderSize.z * bosLossyScale.z);
 
         var boxColliderCenter = transform.TransformPoint(boxCollider.center);
 
         switch (boxDirection)
         {
             case BoxDirection.Default:
-                GenerateRectDefault(boxColliderCenter, bosFinalSize);
+                GenerateRectDefault(boxColliderCenter, boxFinalSize);
                 break;
             case BoxDirection.FromBlender:
-                GenerateFromBlender(boxColliderCenter, bosFinalSize);
+                GenerateFromBlender(boxColliderCenter, boxFinalSize);
                 break;
         }
 
