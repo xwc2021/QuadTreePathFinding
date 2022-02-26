@@ -15,3 +15,20 @@ quadtree path finding
 # 開關
 showNodeLink = true
 ![image](https://lh3.googleusercontent.com/pw/AM-JKLWBr_Fe_xv_HOzAYEER7qLtcovBY2BoN7maMdnAMPueg2kCMBBt0z677ml3qdsWuSDPgo96Fu2avQooh6E5mllst_tQKRUCRMelfsIwqUglPSXGqWTCH8TSaWQ7KYh0bL-DdO42ZkQYWMBsne2iQUmxQw=w1367-h906-no?authuser=0)
+
+# 比較
+
+單純比較節點數量
+不考慮單個QuadTreeConnectedNode的Link數
+```
+QuadTreeConnectedNode[] leftLink, rightLink, upLink, downLink;
+```
+| split level | QuadTreeConnectedNode (不含leaf node) | QuadTreeConnectedNode (含非leaf node) | UniformGridNode |
+|-------------|----------------------------------|-------------------------------|--------------|
+| 2           | 16                               | 21                            | 16           |
+| 3           | 55                               | 73                            | 64           |
+| 4           | 130                              | 173                           | 256          |
+| 5           | 304                              | 405                           | 1024         |
+| 6           | 637                              | 849                           | 4096         |
+| 7           | 1345                             | 1793                          | 16384        |
+| 8           | 2821                             | 3761                          | 65535        |

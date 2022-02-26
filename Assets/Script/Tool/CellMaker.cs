@@ -247,6 +247,7 @@ public class CellMaker : MonoBehaviour
         // (2)顯示用的 黃色Rect
         outerQuadRect.Clear();
         CollectDrawRect(outerQuadRect, true);
+        print("Outer Node Count : " + outerQuadRect.Count);
     }
     public List<IRect> GetOuterQuadRect() { return outerQuadRect; }
 
@@ -256,6 +257,7 @@ public class CellMaker : MonoBehaviour
         // 顯示用的 紅色Rect
         innerQuadRect.Clear(); ;
         CollectDrawRect(innerQuadRect, false);
+        print("Inner Node Count : " + innerQuadRect.Count);
     }
     public List<IRect> GetInnerQuadRect() { return innerQuadRect; }
 }
