@@ -23,12 +23,12 @@ showNodeLink = true
 ```
 QuadTreeConnectedNode[] leftLink, rightLink, upLink, downLink;
 ```
-| split level | QuadTreeConnectedNode (不含leaf node) | QuadTreeConnectedNode (含非leaf node) | UniformGridNode |
-|-------------|----------------------------------|-------------------------------|--------------|
-| 2           | 16                               | 21                            | 16           |
-| 3           | 55                               | 73                            | 64           |
-| 4           | 130                              | 173                           | 256          |
-| 5           | 304                              | 405                           | 1024         |
-| 6           | 637                              | 849                           | 4096         |
-| 7           | 1345                             | 1793                          | 16384        |
-| 8           | 2821                             | 3761                          | 65535        |
+| split level | QuadTreeConnectedNode (不含非leaf node) | QuadTreeConnectedNode (含非leaf node) | UniformGridNode |
+|-------------|-----------------------------------------|---------------------------------------|-----------------|
+| 2           | 16                                      | 21                                    | 16              |
+| 3           | 55                                      | 73                                    | 64              |
+| 4           | 130                                     | 173                                   | 256             |
+| 5           | 304                                     | 405                                   | 1024            |
+| 6           | 637                                     | 849                                   | 4096            |
+| 7           | 1345                                    | 1793                                  | 16384           |
+| 8           | 2821                                    | 3761                                  | 65536           |
