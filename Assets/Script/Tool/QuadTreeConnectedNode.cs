@@ -1,8 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using DiyAStar;
-
 public static class IGraphNodeExtensions
 {
     public static Vector3 GetPosition(this IGraphNode target)
@@ -12,8 +10,9 @@ public static class IGraphNodeExtensions
     }
 }
 
-public class QuadTreeConnectedNode : IRect, IGraphNode {
-
+public class QuadTreeConnectedNode : IRect, IGraphNode
+{
+    /* IGraphNode相關 */
     public int EdgeCount()
     {
         return edges.Count;
@@ -22,12 +21,12 @@ public class QuadTreeConnectedNode : IRect, IGraphNode {
     List<float> costs;
     public float GetEdgeCost(int index) { return costs[index]; }
     public IGraphNode GetEdge(int index) { return edges[index]; }
-    public float getAccumulationCost(){return accumulationCost;}
+    public float getAccumulationCost() { return accumulationCost; }
 
     IGraphNode comeFrom;
     public IGraphNode getComeFrom() { return comeFrom; }
     public void setComeFrom(IGraphNode node) { comeFrom = node; }
-    bool visited=false;
+    bool visited = false;
     float accumulationCost = 0;
     public void resetPathInfo()
     {
@@ -36,7 +35,7 @@ public class QuadTreeConnectedNode : IRect, IGraphNode {
         accumulationCost = 0;
     }
 
-    public Vector3 GetPosition(){return centerPoint;}
+    public Vector3 GetPosition() { return centerPoint; }
 
     float GetDistanceTo(IGraphNode target)
     {
@@ -98,7 +97,9 @@ public class QuadTreeConnectedNode : IRect, IGraphNode {
         }
     }
 
-    bool isOuter = true;
+
+    /* QuadTreeConnectedNode相關 */
+    bool isOuter = true; // 是不是位在IRect外面
     public void SetIsOuter(bool b)
     {
         isOuter = b;
@@ -111,7 +112,8 @@ public class QuadTreeConnectedNode : IRect, IGraphNode {
     float Width;
     public float halfHeight;
     public float halfWidth;
-    public QuadTreeConnectedNode(float minX, float maxX, float minZ, float maxZ,int level) {
+    public QuadTreeConnectedNode(float minX, float maxX, float minZ, float maxZ, int level)
+    {
         this.minX = minX;
         this.maxX = maxX;
         this.minZ = minZ;
@@ -121,7 +123,7 @@ public class QuadTreeConnectedNode : IRect, IGraphNode {
         this.centerZ = 0.5f * (minZ + maxZ);
         this.Width = maxX - minX;
         this.Height = maxZ - minZ;
-        this.halfWidth = 0.5f* this.Width;
+        this.halfWidth = 0.5f * this.Width;
         this.halfHeight = 0.5f * this.Height;
 
         points = new Vector3[4];
@@ -130,7 +132,7 @@ public class QuadTreeConnectedNode : IRect, IGraphNode {
         points[2] = new Vector3(maxX, 0, maxZ);
         points[3] = new Vector3(minX, 0, maxZ);
 
-        centerPoint= new Vector3(centerX, 0, centerZ); ;
+        centerPoint = new Vector3(centerX, 0, centerZ); ;
     }
 
     public QuadTreeConnectedNode[] SplitTo4()
@@ -138,10 +140,10 @@ public class QuadTreeConnectedNode : IRect, IGraphNode {
         childs = new QuadTreeConnectedNode[4];
         var nextLevel = level + 1;
         childs[0] = new QuadTreeConnectedNode(minX, centerX, minZ, centerZ, nextLevel);//左下
-        childs[1] = new QuadTreeConnectedNode(centerX,maxX, minZ, centerZ, nextLevel);//右下
+        childs[1] = new QuadTreeConnectedNode(centerX, maxX, minZ, centerZ, nextLevel);//右下
         childs[2] = new QuadTreeConnectedNode(centerX, maxX, centerZ, maxZ, nextLevel);//右上
         childs[3] = new QuadTreeConnectedNode(minX, centerX, centerZ, maxZ, nextLevel);//左上
-        //Debug.Log(level);
+                                                                                       //Debug.Log(level);
 
         return childs;
     }
@@ -153,7 +155,7 @@ public class QuadTreeConnectedNode : IRect, IGraphNode {
 
     bool IsContainPoint(Vector3 point)
     {
-        return point.x > minX && point.x < maxX && point.z > minZ && point.z < maxZ ;
+        return point.x > minX && point.x < maxX && point.z > minZ && point.z < maxZ;
     }
 
     public bool IsContainRectVertex(IRect rect)
@@ -184,7 +186,7 @@ public class QuadTreeConnectedNode : IRect, IGraphNode {
         return centerPoint;
     }
 
-    public void GetGraphNode(Vector3 pos, ref IGraphNode  graphNode)
+    public void GetGraphNode(Vector3 pos, ref IGraphNode graphNode)
     {
         if (IsContainPoint(pos))
         {
@@ -201,7 +203,7 @@ public class QuadTreeConnectedNode : IRect, IGraphNode {
         }
     }
 
-    public void CollectDrawRect(List<IRect> list,bool outer,bool onlyLeafNode)
+    public void CollectDrawRect(List<IRect> list, bool outer, bool onlyLeafNode)
     {
         if (onlyLeafNode)
         {
@@ -214,24 +216,12 @@ public class QuadTreeConnectedNode : IRect, IGraphNode {
             if (this.isOuter == outer)
                 list.Add(this);
         }
-        
 
         if (childs == null)
-            return; 
+            return;
 
         foreach (var child in childs)
             child.CollectDrawRect(list, outer, onlyLeafNode);
-    }
-
-    public class LinkInfo
-    {
-        public QuadTreeConnectedNode from;
-        public QuadTreeConnectedNode to;
-        public LinkInfo(QuadTreeConnectedNode from, QuadTreeConnectedNode to)
-        {
-            this.from = from;
-            this.to = to;
-        }
     }
 
     static List<LinkInfo> verticalLinks = new List<LinkInfo>();
@@ -241,15 +231,15 @@ public class QuadTreeConnectedNode : IRect, IGraphNode {
         verticalLinks.Clear();
         horizontalLinks.Clear();
     }
-    public static List<LinkInfo> GetVerticaLinks(){return verticalLinks;}
+    public static List<LinkInfo> GetVerticaLinks() { return verticalLinks; }
     public static List<LinkInfo> GetHorizontalLinks() { return horizontalLinks; }
 
     public void MakeConnected()
     {
         if (HasChild())
         {
-            //對每個node
-            //找出4組子node配對Pn
+            // 對每個node
+            // 找出4組子node配對Pn
             MakeConnectedHorizontal(childs[0], childs[1]);
             MakeConnectedHorizontal(childs[3], childs[2]);
             MakeConnectedVertical(childs[1], childs[2]);
@@ -262,10 +252,10 @@ public class QuadTreeConnectedNode : IRect, IGraphNode {
 
     void MakeConnectedHorizontal(QuadTreeConnectedNode leftNode, QuadTreeConnectedNode rightNode)
     {
-        //如果Pn裡的2個node都沒有child node，就為該2個node建立連結
+        // 如果Pn裡的2個node都沒有child node，就為該2個node建立連結
         if (!leftNode.HasChild() && !rightNode.HasChild())
         {
-            //https://plus.google.com/u/0/+XiangweiChiou/posts/EET3zRE8Awz
+            // https://plus.google.com/u/0/+XiangweiChiou/posts/EET3zRE8Awz
             if (!leftNode.isOuter || !rightNode.isOuter)
                 return;
 
@@ -277,7 +267,7 @@ public class QuadTreeConnectedNode : IRect, IGraphNode {
 
             horizontalLinks.Add(new LinkInfo(leftNode, rightNode));
         }
-        else//否則，向下遞迴找出邊界上子node，並相連
+        else // 否則，向下遞迴找出邊界上子node，並相連
         {
             var leftSideNodes = new List<QuadTreeConnectedNode>();
 
@@ -294,15 +284,15 @@ public class QuadTreeConnectedNode : IRect, IGraphNode {
                 GetBorderNodes(rightNode, new int[] { 0, 3 }, rightSideNodes);
 
             connectTwoSide(true, leftSideNodes, rightSideNodes);
-        }    
+        }
     }
 
     void MakeConnectedVertical(QuadTreeConnectedNode downNode, QuadTreeConnectedNode upNode)
     {
-        //如果Pn裡的2個node都沒有child node，就為該2個node建立連結
+        // 如果Pn裡的2個node都沒有child node，就為該2個node建立連結
         if (!downNode.HasChild() && !upNode.HasChild())
         {
-            //https://plus.google.com/u/0/+XiangweiChiou/posts/EET3zRE8Awz
+            // https://plus.google.com/u/0/+XiangweiChiou/posts/EET3zRE8Awz
             if (!downNode.isOuter || !upNode.isOuter)
                 return;
 
@@ -314,17 +304,17 @@ public class QuadTreeConnectedNode : IRect, IGraphNode {
 
             verticalLinks.Add(new LinkInfo(downNode, upNode));
         }
-        else//否則，向下遞迴找出邊界上子node，並相連
+        else // 否則，向下遞迴找出邊界上子node，並相連
         {
             var upSideNodes = new List<QuadTreeConnectedNode>();
 
-            if(!upNode.HasChild())
+            if (!upNode.HasChild())
                 upSideNodes.Add(upNode);
             else
                 GetBorderNodes(upNode, new int[] { 0, 1 }, upSideNodes);
 
             var downSideNodes = new List<QuadTreeConnectedNode>();
-           
+
             if (!downNode.HasChild())
                 downSideNodes.Add(downNode);
             else
@@ -334,7 +324,7 @@ public class QuadTreeConnectedNode : IRect, IGraphNode {
         }
     }
 
-    static void GetBorderNodes(QuadTreeConnectedNode targetNode,int[] borderIndex,List<QuadTreeConnectedNode> list)
+    static void GetBorderNodes(QuadTreeConnectedNode targetNode, int[] borderIndex, List<QuadTreeConnectedNode> list)
     {
         if (!targetNode.HasChild())
             return;
@@ -349,7 +339,57 @@ public class QuadTreeConnectedNode : IRect, IGraphNode {
         }
     }
 
-    class CompareHelper
+    void connectTwoSide(bool isLeftRight, List<QuadTreeConnectedNode> firstSideNodes, List<QuadTreeConnectedNode> secondSideNodes)
+    {
+        // Debug.Log(firstSideNodes.Count + "," + secondSideNodes.Count);
+        var compareHelper = new ConnectHelper(isLeftRight, firstSideNodes, secondSideNodes);
+
+        compareHelper.AddFirstSide();
+        compareHelper.AddSecondSide();
+        while (true)
+        {
+            // 當2個buffer的sum值相等，就可以ConnectNode
+            if (compareHelper.IsEqual())
+            {
+                // Debug.Log("IsEqual");
+                compareHelper.ConnectNode(); // 實際做connect的地方
+                compareHelper.ClearBuffer();
+
+                if (compareHelper.IsFinish())
+                    return;
+                else
+                {
+                    compareHelper.AddFirstSide();
+                    compareHelper.AddSecondSide();
+                }
+            }
+            else if (compareHelper.FirstSideIsBigger())
+            {
+                // Debug.Log("FirstSideIsBigger");
+                compareHelper.AddSecondSide();
+            }
+            else
+            {
+                // Debug.Log("SecondSideIsBigger");
+                compareHelper.AddFirstSide();
+            }
+        }
+    }
+
+    public class LinkInfo
+    {
+        public QuadTreeConnectedNode from;
+        public QuadTreeConnectedNode to;
+        public LinkInfo(QuadTreeConnectedNode from, QuadTreeConnectedNode to)
+        {
+            this.from = from;
+            this.to = to;
+        }
+    }
+
+    // https://gpnnotes.blogspot.com/2018/10/quad-tree-path-finding-1.html
+    // 圖ConnectHelper
+    class ConnectHelper
     {
         bool isLeftRight;
 
@@ -357,7 +397,7 @@ public class QuadTreeConnectedNode : IRect, IGraphNode {
         // 下/上
         List<QuadTreeConnectedNode> firstSideNodes;
         List<QuadTreeConnectedNode> secondSideNodes;
-        public CompareHelper(bool isLeftRight,List<QuadTreeConnectedNode> firstSideNodes, List<QuadTreeConnectedNode> secondSideNodes)
+        public ConnectHelper(bool isLeftRight, List<QuadTreeConnectedNode> firstSideNodes, List<QuadTreeConnectedNode> secondSideNodes)
         {
             this.isLeftRight = isLeftRight;
             this.firstSideNodes = firstSideNodes;
@@ -371,7 +411,8 @@ public class QuadTreeConnectedNode : IRect, IGraphNode {
 
         int leftIndex = 0;
         int rightIndex = 0;
-        public void AddFirstSide() {
+        public void AddFirstSide()
+        {
             var node = firstSideNodes[leftIndex];
             firstBuffer.Add(node);
             firstSideSum = firstSideSum + GetValue(node);
@@ -391,7 +432,8 @@ public class QuadTreeConnectedNode : IRect, IGraphNode {
             return isLeftRight ? node.Width : node.Height;
         }
 
-        public void ClearBuffer() {
+        public void ClearBuffer()
+        {
             firstBuffer.Clear();
             secondBuffer.Clear();
             firstSideSum = 0;
@@ -420,7 +462,7 @@ public class QuadTreeConnectedNode : IRect, IGraphNode {
 
         void ConnectVertical()
         {
-            //1對1
+            // 1對1
             if (firstBuffer.Count == 1 && secondBuffer.Count == 1)
             {
                 var leftNode = firstBuffer[0];
@@ -438,7 +480,7 @@ public class QuadTreeConnectedNode : IRect, IGraphNode {
                 horizontalLinks.Add(new LinkInfo(leftNode, rightNode));
             }
 
-            //1對多
+            // 1對多
             if (firstBuffer.Count == 1 && secondBuffer.Count > 1)
             {
                 var leftNode = firstBuffer[0];
@@ -464,8 +506,8 @@ public class QuadTreeConnectedNode : IRect, IGraphNode {
                 }
             }
 
-            //多對1
-            if (firstBuffer.Count >1 && secondBuffer.Count== 1)
+            // 多對1
+            if (firstBuffer.Count > 1 && secondBuffer.Count == 1)
             {
                 var rightNode = secondBuffer[0];
                 if (!rightNode.isOuter)
@@ -486,14 +528,14 @@ public class QuadTreeConnectedNode : IRect, IGraphNode {
                     rightNode.leftLink[nowIndex] = leftNode;
                     ++nowIndex;
 
-                    horizontalLinks.Add(new LinkInfo(leftNode,rightNode));
+                    horizontalLinks.Add(new LinkInfo(leftNode, rightNode));
                 }
             }
         }
 
         void ConnectHorizontal()
         {
-            //1對1
+            // 1對1
             if (firstBuffer.Count == 1 && secondBuffer.Count == 1)
             {
                 var downNode = firstBuffer[0];
@@ -511,7 +553,7 @@ public class QuadTreeConnectedNode : IRect, IGraphNode {
                 verticalLinks.Add(new LinkInfo(downNode, upNode));
             }
 
-            //1對多
+            // 1對多
             if (firstBuffer.Count == 1 && secondBuffer.Count > 1)
             {
                 var downNode = firstBuffer[0];
@@ -537,7 +579,7 @@ public class QuadTreeConnectedNode : IRect, IGraphNode {
                 }
             }
 
-            //多對1
+            // 多對1
             if (firstBuffer.Count > 1 && secondBuffer.Count == 1)
             {
                 var upNode = secondBuffer[0];
@@ -569,44 +611,7 @@ public class QuadTreeConnectedNode : IRect, IGraphNode {
             return leftIndex == firstSideNodes.Count && rightIndex == secondSideNodes.Count;
         }
 
-        public bool IsEqual(){return Mathf.Abs(firstSideSum - secondSideSum) < float.Epsilon;}
-        public bool FirstSideIsBigger() { return firstSideSum > secondSideSum; }  
-}
-
-    void connectTwoSide(bool isLeftRight, List<QuadTreeConnectedNode> firstSideNodes, List<QuadTreeConnectedNode> secondSideNodes)
-    {
-        //Debug.Log(firstSideNodes.Count + "," + secondSideNodes.Count);
-        var compareHelper = new CompareHelper(isLeftRight, firstSideNodes, secondSideNodes);
-
-        compareHelper.AddFirstSide();
-        compareHelper.AddSecondSide();
-        while (true)
-        {
-            //當2個buffer的sum值相等，就可以ConnectNode
-            if (compareHelper.IsEqual())
-            {
-                //Debug.Log("IsEqual");
-                compareHelper.ConnectNode();
-                compareHelper.ClearBuffer();
-
-                if (compareHelper.IsFinish())
-                    return;
-                else
-                {
-                    compareHelper.AddFirstSide();
-                    compareHelper.AddSecondSide();
-                }
-            }
-            else if (compareHelper.FirstSideIsBigger())
-            {
-                //Debug.Log("FirstSideIsBigger");
-                compareHelper.AddSecondSide();
-            }
-            else
-            {
-                //Debug.Log("SecondSideIsBigger");
-                compareHelper.AddFirstSide();
-            }  
-        }
+        public bool IsEqual() { return Mathf.Abs(firstSideSum - secondSideSum) < float.Epsilon; }
+        public bool FirstSideIsBigger() { return firstSideSum > secondSideSum; }
     }
 }

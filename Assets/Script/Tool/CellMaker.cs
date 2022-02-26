@@ -1,10 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using DiyAStar;
-
-public class CellMaker : MonoBehaviour {
-
+public class CellMaker : MonoBehaviour
+{
     public float nodeSize = 0.25f;
     public float modifyNodeSize = 0.125f;
 
@@ -24,23 +22,23 @@ public class CellMaker : MonoBehaviour {
         return modifyNodes.ToArray();
     }
 
-    List<IGraphNode> rawNodes =new List<IGraphNode>();
+    List<IGraphNode> rawNodes = new List<IGraphNode>();
     List<Vector3> modifyNodes = new List<Vector3>();
     public void TestPathFind()
     {
         rawNodes = FindPath(from.position, destination.position);
-        modifyNodes=ModifyPath(rawNodes);
+        modifyNodes = ModifyPath(rawNodes);
         Debug.Log("rawNodes" + rawNodes.Count);
     }
 
-    AStarPathFinder pathFinder =new AStarPathFinder();
+    AStarPathFinder pathFinder = new AStarPathFinder();
 
-    public List<IGraphNode> FindPath(Vector3 from ,Vector3 destination)
+    public List<IGraphNode> FindPath(Vector3 from, Vector3 destination)
     {
         AStarPathFinder.resetIGraphNode(outerQuadNode);
 
-        IGraphNode nodeFrom=null, nodeDestination = null;
-        quadTreeConnectedNode.GetGraphNode(from,ref nodeFrom);
+        IGraphNode nodeFrom = null, nodeDestination = null;
+        quadTreeConnectedNode.GetGraphNode(from, ref nodeFrom);
         quadTreeConnectedNode.GetGraphNode(destination, ref nodeDestination);
 
         return pathFinder.findPath(nodeFrom, nodeDestination);
@@ -49,13 +47,13 @@ public class CellMaker : MonoBehaviour {
     Vector3 GetCrossPoint(IGraphNode p0, IGraphNode p1)
     {
         var n0 = p0 as QuadTreeConnectedNode;
-        var n1= p1 as QuadTreeConnectedNode;
+        var n1 = p1 as QuadTreeConnectedNode;
 
         //判斷是水平還是垂直
-        var vec =n1.GetPosition() - n0.GetPosition();
+        var vec = n1.GetPosition() - n0.GetPosition();
 
         bool isHorizontal = Mathf.Abs(vec.x) > Mathf.Abs(vec.z);
-        float ratio = isHorizontal? n0.halfWidth / Mathf.Abs(vec.x): n0.halfHeight / Mathf.Abs(vec.z);
+        float ratio = isHorizontal ? n0.halfWidth / Mathf.Abs(vec.x) : n0.halfHeight / Mathf.Abs(vec.z);
 
         //相似三角形的1邊ratio會=其他邊ratio
         return n0.GetPosition() + vec * ratio;
@@ -92,7 +90,7 @@ public class CellMaker : MonoBehaviour {
 
     public void GetAllBoxColliderMetaInfoInSceneAndGenerateRect()
     {
-        boxColliderMetaInfoList=GameObject.FindObjectsOfType<BoxColliderMetaInfo>();
+        boxColliderMetaInfoList = GameObject.FindObjectsOfType<BoxColliderMetaInfo>();
 
         foreach (var boxColliderMetaInfo in boxColliderMetaInfoList)
         {
@@ -107,15 +105,15 @@ public class CellMaker : MonoBehaviour {
     }
 
     [SerializeField]
-    int maxSplitLevel=5;
+    int maxSplitLevel = 5;
     public int GetMaxSplitLeve() { return maxSplitLevel; }
 
     QuadTreeConnectedNode quadTreeConnectedNode;
 
-    public void CollectDrawRect(List<IRect> list,bool outer)
+    public void CollectDrawRect(List<IRect> list, bool outer)
     {
-        if(quadTreeConnectedNode!=null)
-            quadTreeConnectedNode.CollectDrawRect(list,outer, onlyLeafNode);
+        if (quadTreeConnectedNode != null)
+            quadTreeConnectedNode.CollectDrawRect(list, outer, onlyLeafNode);
     }
 
     public void CollectDrawRectOnlyLeafNode(List<IRect> list, bool outer)
@@ -127,12 +125,12 @@ public class CellMaker : MonoBehaviour {
     //除了是四叉樹，所有葉節點彼此還會相連
     public void GenerateQuadTreeConnectedNode()
     {
-        var origin=GetOrigin();
+        var origin = GetOrigin();
         var border = GetBorder();
-        quadTreeConnectedNode = new QuadTreeConnectedNode(origin.x, border.x, origin.z, border.z,0);
+        quadTreeConnectedNode = new QuadTreeConnectedNode(origin.x, border.x, origin.z, border.z, 0);
 
         //第1次直接split
-        var nowTestNodes =quadTreeConnectedNode.SplitTo4();
+        var nowTestNodes = quadTreeConnectedNode.SplitTo4();
         var nextTestNodes = new List<QuadTreeConnectedNode>();
 
         //進行分裂
@@ -148,7 +146,7 @@ public class CellMaker : MonoBehaviour {
                     //就把node分成4塊，並加入下一輪的測試清單
                     //有分裂的話outer=true(預設值)
                     nextTestNodes.AddRange(node.SplitTo4());
-                }          
+                }
                 else
                     SetIsOuter(node, colliderRects);
             }
@@ -183,7 +181,7 @@ public class CellMaker : MonoBehaviour {
             node.SetIsOuter(true);
     }
 
-    bool NodeIsIntersectWithColliderRects(QuadTreeConnectedNode node,IRect[] colliderRects)
+    bool NodeIsIntersectWithColliderRects(QuadTreeConnectedNode node, IRect[] colliderRects)
     {
         for (var i = 0; i < colliderRects.Length; ++i)
         {
@@ -210,7 +208,7 @@ public class CellMaker : MonoBehaviour {
         for (var i = 0; i < colliderRects.Length; ++i)
         {
             var rect = colliderRects[i];
-            if (GeometryTool.IsContainCenterPoint(rect,node))
+            if (GeometryTool.IsContainCenterPoint(rect, node))
                 return true;
         }
         return false;
@@ -234,8 +232,10 @@ public class CellMaker : MonoBehaviour {
 
     IGraphNode[] outerQuadNode;
     List<IRect> outerQuadRect = new List<IRect>();
+
     public void CollectOuterQuadRect()
     {
+        // (1)收集尋路用的
         outerQuadRect.Clear();
         CollectDrawRectOnlyLeafNode(outerQuadRect, true);
 
@@ -244,14 +244,16 @@ public class CellMaker : MonoBehaviour {
         for (var i = 0; i < outerQuadRect.Count; ++i)
             outerQuadNode[i] = outerQuadRect[i] as IGraphNode;
 
+        // (2)顯示用的 黃色Rect
         outerQuadRect.Clear();
         CollectDrawRect(outerQuadRect, true);
     }
     public List<IRect> GetOuterQuadRect() { return outerQuadRect; }
 
-    List<IRect> innerQuadRect =new List<IRect>();
+    List<IRect> innerQuadRect = new List<IRect>();
     public void CollectInnerQuadRect()
     {
+        // 顯示用的 紅色Rect
         innerQuadRect.Clear(); ;
         CollectDrawRect(innerQuadRect, false);
     }

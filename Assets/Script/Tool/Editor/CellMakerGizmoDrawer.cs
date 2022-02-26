@@ -1,11 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEditor;
 using DiyAStar;
-
-public class CellMakerGizmoDrawer {
-
+public class CellMakerGizmoDrawer
+{
     [DrawGizmo(GizmoType.Selected | GizmoType.Active)]
     static void DrawGizmoFor(CellMaker target, GizmoType gizmoType)
     {
@@ -35,7 +32,7 @@ public class CellMakerGizmoDrawer {
         DrawPathList(nodes, target.nodeSize);
 
         var points = target.GetModifyPath();
-        DrawPathList(points,target.modifyNodeSize);
+        DrawPathList(points, target.modifyNodeSize);
 
         if (target.showNodeLink)
         {
@@ -53,12 +50,12 @@ public class CellMakerGizmoDrawer {
 
     static Color nodeColor = Color.green;
     static Color modifyNodeColor = Color.blue;
-    static Color colliderColor=Color.green;
+    static Color colliderColor = Color.green;
     static Color quadTreeOuter = Color.yellow;
     static Color quadTreeInner = Color.red;
     static Color quadTreeHorizontalLink = new Color(0, 0.99609375f, 0.99609375f);
     static Color quadTreeVerticalLink = new Color(0.9375f, 0.5f, 0.5f);
-    static void DrawRect(IRect rect,Color color)
+    static void DrawRect(IRect rect, Color color)
     {
         var point = rect.GetRectInfo();
         if (point == null)
@@ -70,13 +67,13 @@ public class CellMakerGizmoDrawer {
         Gizmos.DrawLine(point[3], point[0]);
     }
 
-    public static void DrawQuadTreeLink(QuadTreeConnectedNode from ,QuadTreeConnectedNode to,Color color )
+    public static void DrawQuadTreeLink(QuadTreeConnectedNode from, QuadTreeConnectedNode to, Color color)
     {
         Gizmos.color = color;
-        Gizmos.DrawLine(from.GetCenter(),to.GetCenter());
+        Gizmos.DrawLine(from.GetCenter(), to.GetCenter());
     }
 
-    public static void DrawPathList(IGraphNode[] nodes,float nodeSize)
+    public static void DrawPathList(IGraphNode[] nodes, float nodeSize)
     {
         Gizmos.color = nodeColor;
         foreach (var node in nodes)
@@ -91,5 +88,4 @@ public class CellMakerGizmoDrawer {
         foreach (var p in points)
             Gizmos.DrawSphere(p, nodeSize);
     }
-
 }

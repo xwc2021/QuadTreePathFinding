@@ -1,13 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public enum BoxDirection { Default,FromBlender}
+﻿using UnityEngine;
+public enum BoxDirection { Default, FromBlender }
 
 [RequireComponent(typeof(BoxCollider))]
 public class BoxColliderMetaInfo : MonoBehaviour, IRect
 {
-
     public BoxCollider boxCollider;
     public BoxDirection boxDirection = BoxDirection.Default;
 
@@ -45,7 +41,7 @@ public class BoxColliderMetaInfo : MonoBehaviour, IRect
                 break;
         }
 
-        centerPoint = 0.25f* (points[0] + points[1] + points[2] + points[3]);
+        centerPoint = 0.25f * (points[0] + points[1] + points[2] + points[3]);
     }
 
     void GenerateRectDefault(Vector3 pos, Vector3 size)

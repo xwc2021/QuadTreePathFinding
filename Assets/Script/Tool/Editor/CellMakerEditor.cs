@@ -1,11 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEditor;
 
 [CustomEditor(typeof(CellMaker))]
-public class CellMakerEditor : Editor {
-
+public class CellMakerEditor : Editor
+{
     CellMaker cellMaker;
     void OnEnable()
     {
@@ -17,17 +15,17 @@ public class CellMakerEditor : Editor {
 
         DrawDefaultInspector();
 
-        var splitLevel =cellMaker.GetMaxSplitLeve();
+        var splitLevel = cellMaker.GetMaxSplitLeve();
         var columnCount = Mathf.Pow(2, splitLevel);
         GUILayout.Label("if not using quad tree:" + Mathf.Pow(columnCount, 2));
 
         var OuterQuadRectCount = cellMaker.GetOuterQuadRect().Count;
-        GUILayout.Label("OuterQuadRectCount:"+OuterQuadRectCount);
+        GUILayout.Label("OuterQuadRectCount:" + OuterQuadRectCount);
 
         var InnerQuadRectCount = cellMaker.GetInnerQuadRect().Count;
         GUILayout.Label("InnerQuadRectCount:" + InnerQuadRectCount);
 
-        var QuadRectCount = OuterQuadRectCount+ InnerQuadRectCount;
+        var QuadRectCount = OuterQuadRectCount + InnerQuadRectCount;
         GUILayout.Label("QuadRectCount:" + QuadRectCount);
 
         if (GUILayout.Button("Get All BoxCollider & Generate QuadTree"))

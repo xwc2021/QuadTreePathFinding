@@ -627,7 +627,7 @@ MonoBehaviour:
   modifyNodeSize: 0.125
   from: {fileID: 870455537}
   destination: {fileID: 392554777}
-  onlyLeafNode: 0
+  onlyLeafNode: 1
   showNodeLink: 0
   boxColliderMetaInfoList:
   - {fileID: 99291513}
